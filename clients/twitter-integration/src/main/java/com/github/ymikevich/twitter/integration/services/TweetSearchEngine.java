@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface TweetSearchEngine {
 
-    List<Status> findTweetsByUsername(final String username);
+    List<Status> findTweetsByUsername(String username);
 }
