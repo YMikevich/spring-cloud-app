@@ -1,4 +1,4 @@
-package com.github.ymikevich.twitter.integration.config;
+package com.github.ymikevich.twitter.integration.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
