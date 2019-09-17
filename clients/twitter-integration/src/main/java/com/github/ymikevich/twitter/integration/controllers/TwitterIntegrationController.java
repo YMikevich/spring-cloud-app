@@ -26,8 +26,6 @@ public class TwitterIntegrationController {
      */
     @GetMapping("/search/{username}")
     public List<Status> getTweetsByUsername(@PathVariable final String username) {
-        //todo implementation
-
-        return null;
+        return tweetSearchEngine.findTweetsByUsername(username);
     }
 }
