@@ -24,7 +24,7 @@ public class TwitterIntegrationController {
      * @param username the twitter username
      * @return the tweets by username
      */
-    @GetMapping(value = "/search/{username}")
+    @GetMapping("/search/{username}")
     public List<Status> getTweetsByUsername(@PathVariable final String username) {
         //todo implementation
 
