@@ -8,15 +8,25 @@ import twitter4j.Status;
 
 import java.util.List;
 
+/**
+ * The type Twitter integration controller.
+ */
 @RestController
 @RequiredArgsConstructor
 public class TwitterIntegrationController {
 
     private final TweetSearchEngine tweetSearchEngine;
 
+    /**
+     * Gets tweets by username from service.
+     *
+     * @return the tweets by username
+     */
     @GetMapping
     public List<Status> getTweetsByUsername() {
         //todo implementation
+
+
 
         return null;
     }
