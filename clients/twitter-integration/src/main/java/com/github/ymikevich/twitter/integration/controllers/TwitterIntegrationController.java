@@ -3,6 +3,7 @@ package com.github.ymikevich.twitter.integration.controllers;
 import com.github.ymikevich.twitter.integration.services.TweetSearchEngine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import twitter4j.Status;
 
@@ -20,13 +21,12 @@ public class TwitterIntegrationController {
     /**
      * Gets tweets by username from service.
      *
+     * @param username the twitter username
      * @return the tweets by username
      */
-    @GetMapping
-    public List<Status> getTweetsByUsername() {
+    @GetMapping(value = "/search/{username}")
+    public List<Status> getTweetsByUsername(@PathVariable("username") final String username) {
         //todo implementation
-
-
 
         return null;
     }
