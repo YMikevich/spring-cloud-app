@@ -1,6 +1,6 @@
 package com.github.ymikevich.twitter.integration.services;
 
-import twitter4j.Status;
+import com.github.ymikevich.twitter.integration.responses.TweetResponse;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface TweetSearchEngine {
      * @param username the username
      * @return the list of tweets
      */
-    List<Status> findTweetsByUsername(String username);
+    List<TweetResponse> findTweetsByUsername(String username);
 }
