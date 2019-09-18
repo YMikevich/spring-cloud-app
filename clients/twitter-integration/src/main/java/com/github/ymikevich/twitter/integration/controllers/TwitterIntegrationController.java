@@ -2,6 +2,7 @@ package com.github.ymikevich.twitter.integration.controllers;
 
 import com.github.ymikevich.twitter.integration.services.TweetSearchEngine;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class TwitterIntegrationController {
 
     private final TweetSearchEngine tweetSearchEngine;
@@ -26,8 +28,8 @@ public class TwitterIntegrationController {
      */
     @GetMapping("/search/{username}")
     public List<Status> getTweetsByUsername(@PathVariable final String username) {
-        //todo implementation
+        log.info("Controller received request to search for @" + username + " tweets");
 
-        return null;
+        return tweetSearchEngine.findTweetsByUsername(username);
     }
 }
