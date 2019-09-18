@@ -28,7 +28,7 @@ public class TwitterIntegrationController {
      */
     @GetMapping("/search/{username}")
     public List<TweetResponse> getTweetsByUsername(@PathVariable final String username) {
-        log.info("Controller received request to search for @" + username + " tweets");
+        log.trace("Controller received request to search for @" + username + " tweets");
 
         return tweetSearchEngine.findTweetsByUsername(username);
     }

@@ -14,19 +14,18 @@ import twitter4j.User;
 public class UserToTwitterUserConverter implements Converter<User, TwitterUser> {
     @Override
     public TwitterUser convert(final User user) {
-        log.info("Converting User to TwitterUser");
+        log.trace("Converting User to TwitterUser");
 
         if (user == null) {
             log.warn("User equals null while converting");
             return  null;
         }
 
-        TwitterUser twitterUser = new TwitterUser();
-        twitterUser.setId(user.getId());
-        twitterUser.setEmail(user.getEmail());
-        twitterUser.setName(user.getScreenName());
-
-        log.info("Converted successfully");
-        return twitterUser;
+        log.trace("Converted successfully");
+        return TwitterUser.builder()
+                .id(user.getId())
+                .name(user.getScreenName())
+                .email(user.getEmail())
+                .build();
     }
 }

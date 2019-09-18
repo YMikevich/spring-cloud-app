@@ -1,5 +1,6 @@
 package com.github.ymikevich.twitter.integration.responses;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
+@Builder
 public class TweetResponse {
     private Long id;
     private LocalDateTime createdAt;

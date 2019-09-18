@@ -20,23 +20,22 @@ public class StatusToTweetResponseConverter implements Converter<Status, TweetRe
 
     @Override
     public TweetResponse convert(final Status status) {
-        log.info("Converting Status to TweetResponse");
+        log.trace("Converting Status to TweetResponse");
 
         if (status == null) {
             log.warn("Status equals null while converting");
             return null;
         }
 
-        TweetResponse tweetResponse = new TweetResponse();
-        tweetResponse.setId(status.getId());
-        tweetResponse.setCreatedAt(dateToLocalDateTimeConverter.convert(status.getCreatedAt()));
-        tweetResponse.setText(status.getText());
-        tweetResponse.setSource(status.getSource());
-        tweetResponse.setFavoriteCount(status.getFavoriteCount());
-        tweetResponse.setRetweetCount((status.getRetweetCount()));
-        tweetResponse.setUser(userToTwitterUserConverter.convert(status.getUser()));
-
-        log.info("Converted successfully");
-        return tweetResponse;
+        log.trace("Converted successfully");
+        return TweetResponse.builder()
+                .id(status.getId())
+                .createdAt(dateToLocalDateTimeConverter.convert(status.getCreatedAt()))
+                .text(status.getText())
+                .source(status.getSource())
+                .favoriteCount(status.getFavoriteCount())
+                .retweetCount(status.getRetweetCount())
+                .user(userToTwitterUserConverter.convert(status.getUser()))
+                .build();
     }
 }

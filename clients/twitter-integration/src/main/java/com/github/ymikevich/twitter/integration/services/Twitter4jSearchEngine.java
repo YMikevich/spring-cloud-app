@@ -26,7 +26,7 @@ public class Twitter4jSearchEngine implements TweetSearchEngine {
     @Override
     public List<TweetResponse> findTweetsByUsername(final String username) {
         try {
-            log.info("Trying to get the list of tweets for user @" + username);
+            log.trace("Trying to get the list of tweets for user @" + username);
 
             return twitter.getUserTimeline(username).stream()
                     .map(statusToTweetResponseConverter::convert)

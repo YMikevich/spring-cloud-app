@@ -22,14 +22,14 @@ public class DateToLocalDateTimeConverter implements Converter<Date, LocalDateTi
      * @return the LocalDateTime
      */
     public LocalDateTime convert(final Date dateToConvert) {
-        log.info("Converting Date to LocalDateTime");
+        log.trace("Converting Date to LocalDateTime");
 
         if (dateToConvert == null) {
             log.warn("Date equals null while converting");
             return  null;
         }
 
-        log.info("Converted successfully");
+        log.trace("Converted successfully");
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
