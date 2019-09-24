@@ -15,13 +15,13 @@ Also you should create your own .env file in the root directory of the project w
 2. Run "docker-compose up" command
 
 .env file template: \
-CONSUMER_KEY=your consumer key for Twitter API \
-CONSUMER_SECRET=your consumer secret for Twitter API \
-ACCESS_TOKEN=your consumer access token for Twitter API \
-ACCESS_TOKEN_SECRET=your consumer token secret for Twitter API \
-RABBIT_HOST=host name for RabbitMQ \
-RABBIT_USERNAME=user name for RabbitMQ \
-RABBIT_PASSWORD=user password for RabbitMQ
+TWITTER_CONSUMER_KEY=your consumer key for Twitter API \
+TWITTER_CONSUMER_SECRET=your consumer secret for Twitter API \
+TWITTER_ACCESS_TOKEN=your consumer access token for Twitter API \
+TWITTER_ACCESS_TOKEN_SECRET=your consumer token secret for Twitter API \
+TWITTER_RABBIT_HOST=host name for RabbitMQ \
+TWITTER_RABBIT_USERNAME=user name for RabbitMQ \
+TWITTER_RABBIT_PASSWORD=user password for RabbitMQ
 
 ## Running the tests
 
