@@ -114,7 +114,7 @@
         </module>
         <module name="MethodLength"/>
         <module name="ParameterNumber">
-            <property name="max" value="3"/>
+            <property name="max" value="4"/>
             <property name="ignoreOverriddenMethods" value="true"/>
             <property name="tokens" value="METHOD_DEF"/>
         </module>
