@@ -70,10 +70,6 @@
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
-        <module name="JavadocType">
-            <property name="scope" value="public"/>
-            <property name="allowMissingParamTags" value="true"/>
-        </module>
         <module name="JavadocMethod">
             <property name="scope" value="public"/>
             <property name="allowMissingPropertyJavadoc" value="true"/>
@@ -116,6 +112,11 @@
         <module name="ParameterNumber">
             <property name="max" value="3"/>
             <property name="ignoreOverriddenMethods" value="true"/>
+            <property name="tokens" value="METHOD_DEF"/>
+        </module>
+        <module name="ParameterNumber">
+            <property name="max" value="7"/>
+            <property name="tokens" value="CTOR_DEF"/>
         </module>
 
         <!-- Checks for whitespace                               -->

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class TweetResponse {
+
+public class TweetResponse implements Serializable {
     private Long id;
     private LocalDateTime createdAt;
     private String text;

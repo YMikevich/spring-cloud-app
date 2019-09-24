@@ -9,7 +9,19 @@ The project searches and analyzes tweets.
 
 ## Build and run guide
 
-//todo add more information
+To run the application in docker container you should have docker and docker-compose pre-installed on your system.
+Also you should create your own .env file in the root directory of the project with Twitter API and RabbitMQ credentials.
+1. CD into the root directory of the project(where the docker-compose.yml file is present).
+2. Run "docker-compose up" command
+
+.env file template: \
+TWITTER_CONSUMER_KEY=your consumer key for Twitter API \
+TWITTER_CONSUMER_SECRET=your consumer secret for Twitter API \
+TWITTER_ACCESS_TOKEN=your consumer access token for Twitter API \
+TWITTER_ACCESS_TOKEN_SECRET=your consumer token secret for Twitter API \
+TWITTER_RABBIT_HOST=host name for RabbitMQ \
+TWITTER_RABBIT_USERNAME=user name for RabbitMQ \
+TWITTER_RABBIT_PASSWORD=user password for RabbitMQ
 
 ## Running the tests
 
