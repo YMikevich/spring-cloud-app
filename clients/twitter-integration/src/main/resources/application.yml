@@ -5,10 +5,10 @@ spring:
     password: ${RABBIT_PASSWORD}
 twitter:
   oauth:
-    consumerKey: ${CONSUMER_KEY}
-    consumerSecret: ${CONSUMER_SECRET}
-    accessToken: ${ACCESS_TOKEN}
-    accessTokenSecret: ${ACCESS_TOKEN_SECRET}
+    consumerKey: ${TWITTER_CONSUMER_KEY}
+    consumerSecret: ${TWITTER_CONSUMER_SECRET}
+    accessToken: ${TWITTER_ACCESS_TOKEN}
+    accessTokenSecret: ${TWITTER_ACCESS_TOKEN_SECRET}
 rabbit:
   queue:
     name: 'tweets'
