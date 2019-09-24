@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * The type Tweet producer.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -15,9 +18,14 @@ public class TweetProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public void produce(List<TweetResponse> tweets) {
+    /**
+     * Produce tweets to the queue using RabbitMQ.
+     *
+     * @param tweets the tweets
+     */
+    public void produce(final List<TweetResponse> tweets) {
         log.trace("Producing tweets");
 
-        rabbitTemplate.convertAndSend( "tweets", tweets);
+        rabbitTemplate.convertAndSend("tweets", tweets);
     }
 }
