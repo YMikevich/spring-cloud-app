@@ -5,15 +5,14 @@ import com.github.ymikevich.twitter.integration.responses.TweetResponse;
 import java.util.List;
 
 /**
- * The interface Tweet search engine.
+ * The interface Twitter service.
  */
-public interface TweetSearchEngine {
-
+public interface TwitterService {
     /**
-     * Find tweets by username list.
+     * Find and produce tweets by username.
      *
      * @param username the username
-     * @return the list of tweets
+     * @return the list
      */
-    List<TweetResponse> findRecentTweetsByUsername(String username);
+    List<TweetResponse> findAndProduceTweetsByUsername(String username);
 }

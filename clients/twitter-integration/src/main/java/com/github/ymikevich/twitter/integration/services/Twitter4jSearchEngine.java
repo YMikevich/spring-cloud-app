@@ -24,7 +24,7 @@ public class Twitter4jSearchEngine implements TweetSearchEngine {
     private final StatusToTweetResponseConverter statusToTweetResponseConverter;
 
     @Override
-    public List<TweetResponse> findTweetsByUsername(final String username) {
+    public List<TweetResponse> findRecentTweetsByUsername(final String username) {
         try {
             log.trace("Trying to get the list of tweets for user @" + username);
 
