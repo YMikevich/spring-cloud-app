@@ -9,3 +9,6 @@ twitter:
     consumerSecret: ${CONSUMER_SECRET}
     accessToken: ${ACCESS_TOKEN}
     accessTokenSecret: ${ACCESS_TOKEN_SECRET}
+rabbit:
+  queue:
+    name: 'tweets'

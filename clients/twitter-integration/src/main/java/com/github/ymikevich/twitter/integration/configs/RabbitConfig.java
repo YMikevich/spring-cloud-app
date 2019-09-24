@@ -1,6 +1,7 @@
 package com.github.ymikevich.twitter.integration.configs;
 
 import org.springframework.amqp.core.Queue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,6 +10,18 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitConfig {
+
+    private final String queueName;
+
+    /**
+     * Instantiates a new Rabbit config.
+     *
+     * @param queueName the name of the queue in rabbitMQ.
+     */
+    public RabbitConfig(@Value("${rabbit.queue.name}") final String queueName) {
+        this.queueName = queueName;
+    }
+
     /**
      * Queue queue.
      *
@@ -16,6 +29,6 @@ public class RabbitConfig {
      */
     @Bean
     public Queue queue() {
-        return new Queue("tweets");
+        return new Queue(queueName);
     }
 }
