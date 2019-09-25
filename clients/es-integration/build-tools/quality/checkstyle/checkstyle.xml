@@ -70,11 +70,15 @@
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
-        <module name="JavadocMethod">
-            <property name="scope" value="public"/>
-            <property name="allowMissingPropertyJavadoc" value="true"/>
-            <property name="allowMissingReturnTag" value="true"/>
+        <module name="JavadocType">
+            <property name="tokens" value="INTERFACE_DEF"/>
+            <module name="JavadocMethod">
+                <property name="scope" value="public"/>
+                <property name="allowMissingPropertyJavadoc" value="true"/>
+                <property name="allowMissingReturnTag" value="true"/>
+            </module>
         </module>
+
         <module name="JavadocStyle">
             <property name="scope" value="public"/>
         </module>
