@@ -1,0 +1,8 @@
+spring:
+  rabbitmq:
+    host: ${RABBIT_HOST}
+    username: ${RABBIT_USERNAME}
+    password: ${RABBIT_PASSWORD}
+rabbit:
+  queue:
+    name: 'tweets'
