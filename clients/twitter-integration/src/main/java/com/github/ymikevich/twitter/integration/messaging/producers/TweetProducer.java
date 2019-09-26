@@ -1,5 +1,7 @@
 package com.github.ymikevich.twitter.integration.messaging.producers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ymikevich.twitter.integration.responses.TweetResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -8,9 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * The type Tweet producer.
- */
 @Component
 @Slf4j
 public class TweetProducer {
@@ -29,14 +28,13 @@ public class TweetProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    /**
-     * Produce tweets to the queue using RabbitMQ.
-     *
-     * @param tweets the tweets from Twitter4j
-     */
     public void produce(final List<TweetResponse> tweets) {
         log.trace("Producing tweets");
 
-        rabbitTemplate.convertAndSend(queueName, tweets);
+        try {
+            rabbitTemplate.convertAndSend(tweetsExchange.getName(), routingKey, objectMapper.writeValueAsString(tweets));
+        } catch (JsonProcessingException ex) {
+            log.error(ex.getMessage());
+        }
     }
 }
