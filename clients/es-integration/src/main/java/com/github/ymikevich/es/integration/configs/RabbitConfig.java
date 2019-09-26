@@ -1,10 +1,10 @@
 package com.github.ymikevich.es.integration.configs;
 
-import com.github.ymikevich.es.integration.domain.Receiver;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +12,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
+    private final String routingKey;
     private final String queueName;
+    private final String exchangeName;
 
-    public RabbitConfig(@Value("${rabbit.queue.name}") final String queueName) {
+    public RabbitConfig(@Value("${rabbit.routing_key.name}") final String routingKey,
+                        @Value("${rabbit.queue.name}") final String queueName,
+                        @Value("${rabbit.exchange.name}") final String exchangeName) {
+        this.routingKey = routingKey;
         this.queueName = queueName;
+        this.exchangeName = exchangeName;
     }
 
     @Bean
@@ -24,17 +30,16 @@ public class RabbitConfig {
     }
 
     @Bean
-    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(queueName);
-        container.setMessageListener(listenerAdapter);
-        return container;
+    public Exchange fanoutExchange() {
+        return new FanoutExchange(exchangeName);
     }
 
     @Bean
-    MessageListenerAdapter listenerAdapter(Receiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessage");
+    public Binding binding(final Queue queue, final Exchange fanoutExchange) {
+        return BindingBuilder
+                .bind(queue)
+                .to(fanoutExchange)
+                .with(routingKey)
+                .noargs();
     }
 }

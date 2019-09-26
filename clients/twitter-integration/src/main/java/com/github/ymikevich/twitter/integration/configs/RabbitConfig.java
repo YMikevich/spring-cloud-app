@@ -1,6 +1,7 @@
 package com.github.ymikevich.twitter.integration.configs;
 
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,24 +12,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    private final String queueName;
+    private final String exchangeName;
 
-    /**
-     * Instantiates a new Rabbit config.
-     *
-     * @param queueName the name of the queue in rabbitMQ.
-     */
-    public RabbitConfig(@Value("${rabbit.queue.name}") final String queueName) {
-        this.queueName = queueName;
+    public RabbitConfig(@Value("${rabbit.exchange.name}") final String exchangeName) {
+        this.exchangeName = exchangeName;
     }
 
-    /**
-     * Queue queue.
-     *
-     * @return the queue
-     */
     @Bean
-    public Queue queue() {
-        return new Queue(queueName);
+    Exchange fanoutExchange() {
+        return new FanoutExchange(exchangeName);
     }
 }

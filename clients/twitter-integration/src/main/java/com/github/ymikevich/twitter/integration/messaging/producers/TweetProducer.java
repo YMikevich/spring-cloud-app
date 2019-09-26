@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ymikevich.twitter.integration.responses.TweetResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,17 +16,18 @@ import java.util.List;
 public class TweetProducer {
 
     private final RabbitTemplate rabbitTemplate;
-    private final String queueName;
+    private final String routingKey;
+    private final Exchange tweetsExchange;
+    private final ObjectMapper objectMapper;
 
-    /**
-     * Instantiates a new Tweet producer.
-     *
-     * @param queueName      the queue name in rabbitMQ
-     * @param rabbitTemplate the rabbit template
-     */
-    public TweetProducer(@Value("${rabbit.queue.name}") final String queueName, final RabbitTemplate rabbitTemplate) {
-        this.queueName = queueName;
+    public TweetProducer(@Value("${rabbit.routing_key.name}") final String routingKey,
+                         final RabbitTemplate rabbitTemplate,
+                         final Exchange tweetsExchange,
+                         final ObjectMapper objectMapper) {
+        this.routingKey = routingKey;
         this.rabbitTemplate = rabbitTemplate;
+        this.tweetsExchange = tweetsExchange;
+        this.objectMapper = objectMapper;
     }
 
     public void produce(final List<TweetResponse> tweets) {
