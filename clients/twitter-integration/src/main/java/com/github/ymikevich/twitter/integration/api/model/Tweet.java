@@ -1,4 +1,4 @@
-package com.github.ymikevich.twitter.integration.responses;
+package com.github.ymikevich.twitter.integration.api.model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-
-public class TweetResponse implements Serializable {
+public class Tweet implements Serializable {
     private Long id;
     private LocalDateTime createdAt;
     private String text;

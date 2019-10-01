@@ -1,6 +1,6 @@
 package com.github.ymikevich.twitter.integration.controllers;
 
-import com.github.ymikevich.twitter.integration.responses.TweetResponse;
+import com.github.ymikevich.twitter.integration.api.model.Tweet;
 import com.github.ymikevich.twitter.integration.services.TwitterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class TwitterIntegrationController {
      * @return the tweets by username
      */
     @GetMapping("/search/{username}")
-    public List<TweetResponse> getTweetsByUsername(@PathVariable final String username) {
+    public List<Tweet> getTweetsByUsername(@PathVariable final String username) {
         log.trace("Controller received request to search for @" + username + " tweets");
 
         return twitterService.findAndProduceTweetsByUsername(username);

@@ -25,5 +25,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.10'
 	annotationProcessor 'org.projectlombok:lombok:1.18.10'
 	compile 'org.springframework.boot:spring-boot-starter-amqp'
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+	compile 'org.springframework.boot:spring-boot-starter-json'
+	compile 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 }
+

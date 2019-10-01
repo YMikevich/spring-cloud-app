@@ -1,6 +1,6 @@
 package com.github.ymikevich.twitter.integration.converters;
 
-import com.github.ymikevich.twitter.integration.responses.TweetResponse;
+import com.github.ymikevich.twitter.integration.api.model.Tweet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
@@ -13,13 +13,13 @@ import twitter4j.Status;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class StatusToTweetResponseConverter implements Converter<Status, TweetResponse> {
+public class StatusToTweetResponseConverter implements Converter<Status, Tweet> {
 
     private final DateToLocalDateTimeConverter dateToLocalDateTimeConverter;
     private final UserToTwitterUserConverter userToTwitterUserConverter;
 
     @Override
-    public TweetResponse convert(final Status status) {
+    public Tweet convert(final Status status) {
         log.trace("Converting Status to TweetResponse");
 
         if (status == null) {
@@ -28,7 +28,7 @@ public class StatusToTweetResponseConverter implements Converter<Status, TweetRe
         }
 
         log.trace("Converted successfully");
-        return TweetResponse.builder()
+        return Tweet.builder()
                 .id(status.getId())
                 .createdAt(dateToLocalDateTimeConverter.convert(status.getCreatedAt()))
                 .text(status.getText())
