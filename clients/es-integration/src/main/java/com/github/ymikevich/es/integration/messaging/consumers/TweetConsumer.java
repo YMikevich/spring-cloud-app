@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.services.TweetService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TweetConsumer {
 
     private final ObjectMapper objectMapper;
@@ -24,7 +26,7 @@ public class TweetConsumer {
             tweetService.persistTweets(objectMapper.readValue(tweets, new TypeReference<List<Tweet>>() {
             }));
         } catch (IOException ex) {
-            //todo logging
+            log.error(ex.getMessage());
         }
     }
 }

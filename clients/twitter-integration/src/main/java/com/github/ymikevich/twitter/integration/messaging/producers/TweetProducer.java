@@ -36,7 +36,7 @@ public class TweetProducer {
         try {
             rabbitTemplate.convertAndSend(tweetsExchange.getName(), routingKey, objectMapper.writeValueAsString(tweets));
         } catch (IOException ex) {
-            //todo logging
+            log.error(ex.getMessage());
         }
     }
 }

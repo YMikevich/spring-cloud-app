@@ -29,7 +29,7 @@ public class StatusToTweetResponseConverter implements Converter<Status, Tweet> 
 
         log.trace("Converted successfully");
         return Tweet.builder()
-                .id(status.getId())
+                .tweetId(status.getId())
                 .createdAt(dateToLocalDateTimeConverter.convert(status.getCreatedAt()))
                 .text(status.getText())
                 .source(status.getSource())

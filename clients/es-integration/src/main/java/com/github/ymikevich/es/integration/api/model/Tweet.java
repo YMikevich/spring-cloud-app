@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Document(indexName = "tweets", type = "tweet")
 @Getter
@@ -17,9 +17,10 @@ import java.util.Date;
 public class Tweet {
     @Id
     private String id;
+    private Long tweetId;
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private String text;
     private String source;
     private int favoriteCount;
