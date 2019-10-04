@@ -5,5 +5,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchCrudReposi
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TweetRepository extends ElasticsearchCrudRepository<Tweet, String> {
+public interface TweetRepository extends ElasticsearchCrudRepository<Tweet, Long> {
 }
