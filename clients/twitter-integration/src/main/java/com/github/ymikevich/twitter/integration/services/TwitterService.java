@@ -1,6 +1,6 @@
 package com.github.ymikevich.twitter.integration.services;
 
-import com.github.ymikevich.twitter.integration.responses.TweetResponse;
+import com.github.ymikevich.twitter.integration.api.model.Tweet;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface TwitterService {
      * @param username the username
      * @return the list
      */
-    List<TweetResponse> findAndProduceTweetsByUsername(String username);
+    List<Tweet> findAndProduceTweetsByUsername(String username);
 }

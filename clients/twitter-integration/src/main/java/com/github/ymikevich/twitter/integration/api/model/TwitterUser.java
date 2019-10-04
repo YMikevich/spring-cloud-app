@@ -1,4 +1,4 @@
-package com.github.ymikevich.twitter.integration.responses;
+package com.github.ymikevich.twitter.integration.api.model;
 
 import lombok.Builder;
 import lombok.Getter;

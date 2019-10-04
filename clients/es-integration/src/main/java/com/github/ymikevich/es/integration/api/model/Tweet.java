@@ -1,21 +1,18 @@
-package com.github.ymikevich.twitter.integration.responses;
+package com.github.ymikevich.es.integration.api.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * The type Tweet response.
- */
+@Document(indexName = "tweets", type = "tweet")
 @Getter
 @Setter
-@Builder
-
-public class TweetResponse implements Serializable {
-    private Long id;
+public class Tweet {
+    @Id
+    private Long tweetId;
     private LocalDateTime createdAt;
     private String text;
     private String source;

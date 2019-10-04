@@ -3,11 +3,12 @@ spring:
     host: ${RABBIT_HOST}
     username: ${RABBIT_USERNAME}
     password: ${RABBIT_PASSWORD}
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+      cluster-nodes: ${ELASTIC_HOST}
+      cluster-name: ${ELASTIC_CLUSTER_NAME}
 rabbit:
-  routing_key:
-    name: 'tweets'
   queue:
     name: 'tweets'
-  exchange:
-    name: 'tweets_exchange'
-

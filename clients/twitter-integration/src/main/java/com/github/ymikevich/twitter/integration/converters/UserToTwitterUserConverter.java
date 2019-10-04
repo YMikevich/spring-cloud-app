@@ -1,6 +1,6 @@
 package com.github.ymikevich.twitter.integration.converters;
 
-import com.github.ymikevich.twitter.integration.responses.TwitterUser;
+import com.github.ymikevich.twitter.integration.api.model.TwitterUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
