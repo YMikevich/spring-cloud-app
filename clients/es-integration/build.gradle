@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-	implementation ('org.springframework.boot:spring-boot-starter')
+	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok:1.18.10'
 	annotationProcessor 'org.projectlombok:lombok:1.18.10'
@@ -28,4 +28,3 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-json')
 	compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
 }
-
