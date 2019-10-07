@@ -10,15 +10,15 @@ services:
       - '5672:5672'
     networks:
       - spring-cloud-services-network
-  elastic:
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
-    container_name: elastic
-    hostname: 'elastic'
+    container_name: elasticsearch
+    hostname: 'elasticsearch'
     ports:
       - '9300:9300'
       - '9200:9200'
     environment:
-      - node.name=elastic
+      - node.name=elasticsearch
       - discovery.type=single-node
     volumes:
       - 'esdata0:/usr/share/elasticsearch/data'
@@ -39,7 +39,6 @@ services:
       - RABBIT_PASSWORD
     build:
       context: ./clients/twitter-integration
-      dockerfile: Dockerfile
     ports:
       - '8080:8080'
     volumes:
@@ -50,7 +49,7 @@ services:
     container_name: es-integration
     depends_on:
       - rabbitmq
-      - elastic
+      - elasticsearch
     environment:
       - TWITTER_CONSUMER_KEY
       - TWITTER_CONSUMER_SECRET
@@ -63,7 +62,6 @@ services:
       - ELASTIC_CLUSTER_NAME
     build:
       context: ./clients/es-integration
-      dockerfile: Dockerfile
     ports:
       - '8081:8081'
     volumes:
