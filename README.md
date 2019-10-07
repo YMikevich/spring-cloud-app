@@ -22,6 +22,8 @@ TWITTER_ACCESS_TOKEN_SECRET=your consumer token secret for Twitter API \
 TWITTER_RABBIT_HOST=host name for RabbitMQ \
 TWITTER_RABBIT_USERNAME=user name for RabbitMQ \
 TWITTER_RABBIT_PASSWORD=user password for RabbitMQ
+ELASTIC_HOST=host name for elasticsearch(format - hostname:port)
+ELASTIC_CLUSTER_NAME=cluster name for elasticsearch
 
 ## Running the tests
 

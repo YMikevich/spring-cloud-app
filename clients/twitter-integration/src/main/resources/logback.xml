@@ -10,10 +10,10 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>clients/es-integration/logs/es-integration.log</file>
+        <file>clients/twitter-integration/logs/twitter-integration.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>clients/es-integration/logs/es-integration.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>clients/twitter-integration/logs/twitter-integration.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</Pattern>

@@ -10,6 +10,20 @@ services:
       - '5672:5672'
     networks:
       - spring-cloud-services-network
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    container_name: elastic
+    hostname: 'elastic'
+    ports:
+      - '9300:9300'
+      - '9200:9200'
+    environment:
+      - node.name=elastic
+      - discovery.type=single-node
+    volumes:
+      - 'esdata0:/usr/share/elasticsearch/data'
+    networks:
+      - spring-cloud-services-network
 
   twitter-integration:
     container_name: twitter-integration
@@ -29,11 +43,36 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - '$HOME/twitter-integration/logs:/clients/twitter-integration/logs twitter-integration'
-
+      - '$HOME/tweets-analyzer/twitter-integration/logs:/clients/twitter-integration/logs'
     networks:
       - spring-cloud-services-network
-
+  es-integration:
+    container_name: es-integration
+    depends_on:
+      - rabbitmq
+      - elastic
+    environment:
+      - TWITTER_CONSUMER_KEY
+      - TWITTER_CONSUMER_SECRET
+      - TWITTER_ACCESS_TOKEN
+      - TWITTER_ACCESS_TOKEN_SECRET
+      - RABBIT_HOST
+      - RABBIT_USERNAME
+      - RABBIT_PASSWORD
+      - ELASTIC_HOST
+      - ELASTIC_CLUSTER_NAME
+    build:
+      context: ./clients/es-integration
+      dockerfile: Dockerfile
+    ports:
+      - '8081:8081'
+    volumes:
+      - '$HOME/tweets-analyzer/es-integration/logs:/clients/es-integration/logs'
+    networks:
+      - spring-cloud-services-network
+volumes:
+  esdata0:
+    driver: local
 networks:
   spring-cloud-services-network:
     driver: bridge

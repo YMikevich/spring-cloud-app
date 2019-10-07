@@ -12,5 +12,4 @@ public class EsIntegrationApplicationTests {
     @Test
     public void contextLoads() {
     }
-
 }
