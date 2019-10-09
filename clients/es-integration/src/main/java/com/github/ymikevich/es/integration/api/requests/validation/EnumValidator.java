@@ -20,6 +20,8 @@ public class EnumValidator implements ConstraintValidator<ValidateEnumValue, Obj
         }
 
         String contextValue = value.toString();
-        return Stream.of(enumValues).anyMatch(enumValues-> enumValues.toString().equals(contextValue));
+        return Stream.of(enumValues)
+                .map(Object::toString)
+                .anyMatch(enumValues-> enumValues.equals(contextValue));
     }
 }

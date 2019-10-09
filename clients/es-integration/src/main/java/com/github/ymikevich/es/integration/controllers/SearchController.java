@@ -2,7 +2,7 @@ package com.github.ymikevich.es.integration.controllers;
 
 import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.api.requests.SearchRequest;
-import com.github.ymikevich.es.integration.services.SearchService;
+import com.github.ymikevich.es.integration.services.TweetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,11 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchController {
 
-    private final SearchService defaultSearchService;
+    private final TweetService tweetService;
 
     @PostMapping("search")
     public ResponseEntity<List<Tweet>> search(@Valid @RequestBody final SearchRequest searchRequest) {
-        var tweets = defaultSearchService.searchForTweets(searchRequest);
+        var tweets = tweetService.searchForTweets(searchRequest);
         return ResponseEntity.ok().body(tweets);
     }
 }
