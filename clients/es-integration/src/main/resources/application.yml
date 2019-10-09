@@ -12,3 +12,5 @@ spring:
 rabbit:
   queue:
     name: 'tweets'
+server:
+  port: 8081
