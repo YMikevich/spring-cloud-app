@@ -18,7 +18,7 @@ public class UserToTwitterUserConverter implements Converter<User, TwitterUser> 
 
         if (user == null) {
             log.warn("User equals null while converting");
-            return  null;
+            return null;
         }
 
         log.trace("Converted successfully");

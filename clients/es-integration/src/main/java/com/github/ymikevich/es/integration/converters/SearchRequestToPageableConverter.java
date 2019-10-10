@@ -2,6 +2,7 @@ package com.github.ymikevich.es.integration.converters;
 
 import com.github.ymikevich.es.integration.api.requests.Pagination;
 import com.github.ymikevich.es.integration.api.requests.SearchRequest;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -10,12 +11,13 @@ import org.springframework.stereotype.Component;
 import static java.util.Optional.ofNullable;
 
 @Component
-public class SearchRequestToPageable {
+public class SearchRequestToPageableConverter implements Converter<SearchRequest, Pageable> {
 
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_COUNT = 10;
 
-    public Pageable createPageRequest(final SearchRequest searchRequest) {
+    @Override
+    public Pageable convert(final SearchRequest searchRequest) {
         var pagination = ofNullable(searchRequest.getPagination());
         var sort = ofNullable(searchRequest.getSorting())
                 .map(it -> Sort.by(Sort.Direction.fromString(it.getDirection()), it.getFieldName()))

@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Documented
-@Constraint(validatedBy = { EnumValidator.class })
+@Constraint(validatedBy = {EnumValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
 @Target({
         ElementType.ANNOTATION_TYPE,
