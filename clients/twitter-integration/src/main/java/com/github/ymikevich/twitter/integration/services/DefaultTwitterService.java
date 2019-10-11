@@ -1,7 +1,7 @@
 package com.github.ymikevich.twitter.integration.services;
 
-import com.github.ymikevich.twitter.integration.messaging.producers.TweetProducer;
 import com.github.ymikevich.twitter.integration.api.model.Tweet;
+import com.github.ymikevich.twitter.integration.messaging.producers.TweetProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

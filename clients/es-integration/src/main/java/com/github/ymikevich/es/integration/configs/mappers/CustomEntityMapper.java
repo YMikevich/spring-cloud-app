@@ -10,6 +10,7 @@ import org.springframework.data.elasticsearch.core.geo.CustomGeoModule;
 import java.io.IOException;
 
 public class CustomEntityMapper implements EntityMapper {
+
     private final ObjectMapper objectMapper;
 
     public CustomEntityMapper() {
