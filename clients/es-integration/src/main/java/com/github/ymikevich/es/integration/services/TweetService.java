@@ -1,19 +1,14 @@
 package com.github.ymikevich.es.integration.services;
 
 import com.github.ymikevich.es.integration.api.model.Tweet;
-import com.github.ymikevich.es.integration.repository.TweetRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.github.ymikevich.es.integration.api.requests.search.SearchRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class TweetService {
+public interface TweetService {
 
-    private final TweetRepository tweetRepository;
+    Page<Tweet> searchForTweets(SearchRequest searchRequest);
 
-    public void persistTweets(final List<Tweet> tweets) {
-        tweetRepository.saveAll(tweets);
-    }
+    void persistTweets(List<Tweet> tweets);
 }

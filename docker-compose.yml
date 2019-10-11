@@ -20,6 +20,7 @@ services:
     environment:
       - node.name=elasticsearch
       - discovery.type=single-node
+      - cluster.name=tweets-cluster
     volumes:
       - 'esdata0:/usr/share/elasticsearch/data'
     networks:

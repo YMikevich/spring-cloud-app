@@ -26,7 +26,7 @@ public class DateToLocalDateTimeConverter implements Converter<Date, LocalDateTi
 
         if (dateToConvert == null) {
             log.warn("Date equals null while converting");
-            return  null;
+            return null;
         }
 
         log.trace("Converted successfully");

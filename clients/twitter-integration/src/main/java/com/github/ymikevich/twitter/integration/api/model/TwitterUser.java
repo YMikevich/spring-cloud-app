@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Setter
 @Builder
 public class TwitterUser implements Serializable {
+
     private Long id;
     private String email;
     private String name;
