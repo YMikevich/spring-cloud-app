@@ -1,17 +1,18 @@
 package com.github.ymikevich.es.integration.converters;
 
-import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.api.responses.search.SearchResponse;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
 
-public class PageToSearchResponseConverter implements Converter<Page<Tweet>, SearchResponse<Tweet>> {
+@Component
+public class PageToSearchResponseConverter<T> implements Converter<Page<T>, SearchResponse<T>> {
 
     @Override
-    public SearchResponse<Tweet> convert(final Page<Tweet> source) {
-        SearchResponse<Tweet> searchResponse = new SearchResponse<>();
+    public SearchResponse<T> convert(final Page<T> source) {
+        var searchResponse = new SearchResponse<T>();
 
-        searchResponse.setTweets(source.getContent());
+        searchResponse.setResponseEntities(source.getContent());
         searchResponse.getPagination().setPage(source.getPageable().getPageNumber());
         searchResponse.getPagination().setCount(source.getPageable().getPageSize());
 

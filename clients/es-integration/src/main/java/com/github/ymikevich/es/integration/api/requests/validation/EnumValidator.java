@@ -4,12 +4,12 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.stream.Stream;
 
-public class EnumValidator implements ConstraintValidator<ValidateEnumValue, Object> {
+public class EnumValidator implements ConstraintValidator<ValidEnumValue, Object> {
 
     private Object[] enumValues;
 
     @Override
-    public void initialize(final ValidateEnumValue constraintAnnotation) {
+    public void initialize(final ValidEnumValue constraintAnnotation) {
         enumValues = constraintAnnotation.enumClass().getEnumConstants();
     }
 

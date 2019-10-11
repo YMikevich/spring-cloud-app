@@ -11,6 +11,6 @@ import java.util.List;
 @Setter
 public class SearchResponse<T> {
 
-    private List<T> tweets = new ArrayList<T>();
-    private Pagination pagination;
+    private List<T> responseEntities = new ArrayList<>();
+    private Pagination pagination = new Pagination();
 }

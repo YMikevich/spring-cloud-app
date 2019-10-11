@@ -1,6 +1,6 @@
 package com.github.ymikevich.es.integration.api.requests.search;
 
-import com.github.ymikevich.es.integration.api.requests.validation.ValidateEnumValue;
+import com.github.ymikevich.es.integration.api.requests.validation.ValidEnumValue;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
@@ -13,6 +13,6 @@ public class Sorting {
     @NotBlank
     private String fieldName;
     @NotBlank
-    @ValidateEnumValue(message = "Direction must be ASC or DESC", enumClass = Sort.Direction.class)
+    @ValidEnumValue(message = "Direction must be ASC or DESC", enumClass = Sort.Direction.class)
     private String direction;
 }
