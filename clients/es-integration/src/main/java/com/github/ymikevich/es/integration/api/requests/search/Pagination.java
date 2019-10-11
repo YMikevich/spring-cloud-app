@@ -9,11 +9,11 @@ import javax.validation.constraints.PositiveOrZero;
 @Getter
 @Setter
 public class Pagination {
+
     @PositiveOrZero
     @NotNull
     private Integer page;
     @PositiveOrZero
     @NotNull
     private Integer count;
-
 }

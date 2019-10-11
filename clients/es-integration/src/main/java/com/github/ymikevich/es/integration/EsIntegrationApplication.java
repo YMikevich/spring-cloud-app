@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableRabbit
 public class EsIntegrationApplication {
+
     public static void main(final String[] args) {
         SpringApplication.run(EsIntegrationApplication.class, args);
     }

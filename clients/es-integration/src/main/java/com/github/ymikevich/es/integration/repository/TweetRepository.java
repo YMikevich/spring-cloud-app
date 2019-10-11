@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TweetRepository extends ElasticsearchCrudRepository<Tweet, Long> {
+
     Page<Tweet> findAllByTextLike(String text, Pageable pageable);
 }

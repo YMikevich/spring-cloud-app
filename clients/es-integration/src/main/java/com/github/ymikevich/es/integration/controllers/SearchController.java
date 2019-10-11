@@ -1,5 +1,6 @@
 package com.github.ymikevich.es.integration.controllers;
 
+import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.api.requests.search.SearchRequest;
 import com.github.ymikevich.es.integration.api.responses.search.SearchResponse;
 import com.github.ymikevich.es.integration.converters.PageToSearchResponseConverter;
@@ -16,13 +17,13 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("tweets")
 @RequiredArgsConstructor
-public class SearchController<T> {
+public class SearchController {
 
     private final TweetService tweetService;
-    private final PageToSearchResponseConverter pageToSearchResponseConverter;
+    private final PageToSearchResponseConverter<Tweet> pageToSearchResponseConverter;
 
     @PostMapping("search")
-    public ResponseEntity<SearchResponse<T>> search(@Valid @RequestBody final SearchRequest searchRequest) {
+    public ResponseEntity<SearchResponse<Tweet>> search(@Valid @RequestBody final SearchRequest searchRequest) {
         var responseEntities = pageToSearchResponseConverter.convert(tweetService.searchForTweets(searchRequest));
         return ResponseEntity.ok(responseEntities);
     }

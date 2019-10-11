@@ -12,6 +12,7 @@ import twitter4j.User;
 @Component
 @Slf4j
 public class UserToTwitterUserConverter implements Converter<User, TwitterUser> {
+
     @Override
     public TwitterUser convert(final User user) {
         log.trace("Converting User to TwitterUser");

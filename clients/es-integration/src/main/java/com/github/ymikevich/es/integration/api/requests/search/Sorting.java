@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class Sorting {
+
     @NotBlank
     private String fieldName;
     @NotBlank

@@ -19,6 +19,7 @@ import java.lang.annotation.Target;
         ElementType.PARAMETER
 })
 public @interface ValidEnumValue {
+
     String message() default "{com.github.ymikevich.es.integration.requests.validation.ValidateEnumValue" + "message}";
 
     Class<?>[] groups() default {};

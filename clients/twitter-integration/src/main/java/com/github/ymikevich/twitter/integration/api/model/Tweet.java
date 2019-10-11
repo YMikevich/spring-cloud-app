@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class Tweet implements Serializable {
+
     private Long tweetId;
     private LocalDateTime createdAt;
     private String text;
