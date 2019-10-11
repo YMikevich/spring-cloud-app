@@ -1,4 +1,4 @@
-package com.github.ymikevich.es.integration.api.requests;
+package com.github.ymikevich.es.integration.api.requests.search;
 
 import com.github.ymikevich.es.integration.api.requests.validation.ValidateEnumValue;
 import lombok.Getter;

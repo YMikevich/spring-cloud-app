@@ -1,4 +1,4 @@
-package com.github.ymikevich.es.integration.api.requests;
+package com.github.ymikevich.es.integration.api.requests.search;
 
 import lombok.Getter;
 import lombok.Setter;

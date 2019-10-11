@@ -1,7 +1,7 @@
 package com.github.ymikevich.es.integration.converters;
 
-import com.github.ymikevich.es.integration.api.requests.Pagination;
-import com.github.ymikevich.es.integration.api.requests.SearchRequest;
+import com.github.ymikevich.es.integration.api.requests.search.Pagination;
+import com.github.ymikevich.es.integration.api.requests.search.SearchRequest;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
