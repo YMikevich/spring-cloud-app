@@ -6,8 +6,8 @@ import com.github.ymikevich.es.integration.api.requests.statistics.StatisticsReq
 import com.github.ymikevich.es.integration.api.responses.statistics.StatisticsResponse;
 import org.springframework.data.domain.Page;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface TweetService {
 
@@ -15,5 +15,5 @@ public interface TweetService {
 
     void persistTweets(List<Tweet> tweets);
 
-    StatisticsResponse getUserStatistics(StatisticsRequest statisticsRequest) throws IOException;
+    Optional<StatisticsResponse> getUserStatistics(StatisticsRequest statisticsRequest);
 }
