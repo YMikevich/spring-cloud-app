@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Tweet {
+
     @Id
     private Long tweetId;
     private LocalDateTime createdAt;
