@@ -31,7 +31,6 @@ public class TweetController {
 
     @PostMapping("statistics")
     public ResponseEntity getUserStatistics(@Valid @RequestBody final StatisticsRequest statisticsRequest) {
-
         return ResponseEntity.ok(tweetService.getUserStatistics(statisticsRequest));
     }
 }
