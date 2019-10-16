@@ -4,7 +4,6 @@ import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.api.requests.search.SearchRequest;
 import com.github.ymikevich.es.integration.api.requests.statistics.StatisticsRequest;
 import com.github.ymikevich.es.integration.api.responses.search.SearchResponse;
-import com.github.ymikevich.es.integration.api.responses.statistics.StatisticsResponse;
 import com.github.ymikevich.es.integration.converters.PageToSearchResponseConverter;
 import com.github.ymikevich.es.integration.services.TweetService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("tweets")
@@ -34,12 +32,6 @@ public class TweetController {
     @PostMapping("statistics")
     public ResponseEntity getUserStatistics(@Valid @RequestBody final StatisticsRequest statisticsRequest) {
 
-        Optional<StatisticsResponse> statisticsResponse = tweetService.getUserStatistics(statisticsRequest);
-
-        if (statisticsResponse.isPresent()) {
-            return ResponseEntity.ok(statisticsResponse.get());
-        }
-
-        return ResponseEntity.badRequest().body(statisticsRequest);
+        return ResponseEntity.ok(tweetService.getUserStatistics(statisticsRequest));
     }
 }

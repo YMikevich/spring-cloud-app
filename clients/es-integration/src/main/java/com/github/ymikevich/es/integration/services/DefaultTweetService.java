@@ -5,6 +5,8 @@ import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.api.requests.search.SearchRequest;
 import com.github.ymikevich.es.integration.api.requests.statistics.StatisticsRequest;
 import com.github.ymikevich.es.integration.api.responses.statistics.StatisticsResponse;
+import com.github.ymikevich.es.integration.exceptions.InvalidStatisticsRequestException;
+import com.github.ymikevich.es.integration.exceptions.JacksonConvertionException;
 import com.github.ymikevich.es.integration.repository.TweetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
@@ -46,7 +47,7 @@ public class DefaultTweetService implements TweetService {
     }
 
     @Override
-    public Optional<StatisticsResponse> getUserStatistics(final StatisticsRequest statisticsRequest) {
+    public StatisticsResponse getUserStatistics(final StatisticsRequest statisticsRequest) {
         var fromDate = LocalDateTime.now().minusDays(statisticsRequest.getSinceDays())
                 .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
@@ -61,13 +62,19 @@ public class DefaultTweetService implements TweetService {
 
         var searchResponse = elasticsearchTemplate.query(query, response -> response);
 
-        try {
-            return Optional.of(objectMapper.readValue(searchResponse.toString(), StatisticsResponse.class));
-        } catch (IOException ex) {
-            log.error("Invalid statistics request(user might not exist)");
+        if (searchResponse.getHits().totalHits == 0 || searchResponse.getAggregations().asList().size() == 0) {
+            throw new InvalidStatisticsRequestException(statisticsRequest.getUsername(), fromDate);
         }
 
-        return Optional.empty();
+        var statisticsResponse = StatisticsResponse.builder().build();
+
+        try {
+            statisticsResponse = objectMapper.readValue(searchResponse.toString(), StatisticsResponse.class);
+        } catch (IOException ex) {
+            throw new JacksonConvertionException(ex);
+        }
+
+        return statisticsResponse;
     }
 
     @Override

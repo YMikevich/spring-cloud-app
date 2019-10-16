@@ -7,7 +7,6 @@ import com.github.ymikevich.es.integration.api.responses.statistics.StatisticsRe
 import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TweetService {
 
@@ -15,5 +14,5 @@ public interface TweetService {
 
     void persistTweets(List<Tweet> tweets);
 
-    Optional<StatisticsResponse> getUserStatistics(StatisticsRequest statisticsRequest);
+    StatisticsResponse getUserStatistics(StatisticsRequest statisticsRequest);
 }
