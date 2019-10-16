@@ -16,14 +16,20 @@ public class EsIntegrationExceptionHandler {
     @ExceptionHandler(InvalidStatisticsRequestException.class)
     public ResponseEntity<ApiError> handleInvalidStatisticsException(final InvalidStatisticsRequestException exception) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(new ApiError(HttpStatus.BAD_REQUEST, exception.getMessage(),
-                exception.getStackTrace()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiError.builder()
+                .errorMessage(exception.getMessage())
+                .stackTrace(exception.getStackTrace())
+                .httpStatus(HttpStatus.BAD_REQUEST.toString())
+                .build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(JacksonConvertionException.class)
     public ResponseEntity<ApiError> handleJacksonConversionException(final JacksonConvertionException exception) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage(),
-                exception.getStackTrace()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ApiError.builder()
+                .errorMessage(exception.getMessage())
+                .stackTrace(exception.getStackTrace())
+                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString())
+                .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
