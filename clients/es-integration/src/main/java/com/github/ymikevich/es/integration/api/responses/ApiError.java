@@ -3,7 +3,6 @@ package com.github.ymikevich.es.integration.api.responses;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
