@@ -5,8 +5,6 @@ spring:
     password: ${RABBIT_PASSWORD}
   data:
     elasticsearch:
-      repositories:
-        enabled: true
       cluster-nodes: ${ELASTIC_HOST}
       cluster-name: ${ELASTIC_CLUSTER_NAME}
 rabbit:

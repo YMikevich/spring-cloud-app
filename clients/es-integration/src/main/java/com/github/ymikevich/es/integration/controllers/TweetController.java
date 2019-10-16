@@ -2,6 +2,7 @@ package com.github.ymikevich.es.integration.controllers;
 
 import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.api.requests.search.SearchRequest;
+import com.github.ymikevich.es.integration.api.requests.statistics.StatisticsRequest;
 import com.github.ymikevich.es.integration.api.responses.search.SearchResponse;
 import com.github.ymikevich.es.integration.converters.PageToSearchResponseConverter;
 import com.github.ymikevich.es.integration.services.TweetService;
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("tweets")
 @RequiredArgsConstructor
-public class SearchController {
+public class TweetController {
 
     private final TweetService tweetService;
     private final PageToSearchResponseConverter<Tweet> pageToSearchResponseConverter;
@@ -26,5 +27,10 @@ public class SearchController {
     public ResponseEntity<SearchResponse<Tweet>> search(@Valid @RequestBody final SearchRequest searchRequest) {
         var responseEntities = pageToSearchResponseConverter.convert(tweetService.searchForTweets(searchRequest));
         return ResponseEntity.ok(responseEntities);
+    }
+
+    @PostMapping("statistics")
+    public ResponseEntity getUserStatistics(@Valid @RequestBody final StatisticsRequest statisticsRequest) {
+        return ResponseEntity.ok(tweetService.getUserStatistics(statisticsRequest));
     }
 }
