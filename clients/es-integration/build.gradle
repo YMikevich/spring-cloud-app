@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
     id 'checkstyle'
+    id 'jacoco'
 }
 
 checkstyle {
@@ -28,3 +29,4 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 }
+
