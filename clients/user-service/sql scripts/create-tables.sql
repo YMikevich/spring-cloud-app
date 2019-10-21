@@ -114,7 +114,7 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE VIEW illegal_bisexuals_in_usa AS
+CREATE VIEW illegal_bisexuals AS
 SELECT app_user.id, app_user.name, country.name
 FROM app_user
          LEFT JOIN passport ON passport.user_id = app_user.id
