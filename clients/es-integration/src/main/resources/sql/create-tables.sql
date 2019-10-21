@@ -102,8 +102,8 @@ CREATE TABLE hobby(
 	description VARCHAR(500)
 );
 
-CREATE FUNCTION countUsers(in val varchar, out total integer) RETURNS integer AS $$
+CREATE FUNCTION countUsersInCountry(IN country VARCHAR, OUT total INTEGER) RETURNS INTEGER AS $$
 BEGIN
-SELECT count(*) into total FROM app_user JOIN country ON app_user.country_id=country.id WHERE country.name=val;
+SELECT COUNT(*) INTO total FROM app_user JOIN country ON app_user.country_id=country.id WHERE country.name=country;
 END; $$
 LANGUAGE PLPGSQL;
