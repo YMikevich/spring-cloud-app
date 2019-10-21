@@ -115,11 +115,12 @@ $$
     LANGUAGE PLPGSQL;
 
 CREATE VIEW illegal_bisexuals_in_usa AS
-SELECT app_user.name
+SELECT app_user.id, app_user.name, country.name
 FROM app_user
          LEFT JOIN passport ON passport.user_id = app_user.id
          LEFT JOIN visa ON visa.id = passport.id
          LEFT JOIN role ON role.id = app_user.role_id
+         LEFT JOIN country ON app_user.country_id = country.id
          LEFT JOIN app_user AS user_partner
                    ON app_user.id = user_partner.partner_id
 WHERE (passport.user_id IS NULL

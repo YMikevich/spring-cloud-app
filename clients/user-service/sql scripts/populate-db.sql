@@ -58,7 +58,7 @@ INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, e
 VALUES (3, 1, 4, 4, 3, 'Konfucyi', 'hello_world@yandex.ru', 4, 'M', current_timestamp, current_timestamp);
 INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner, gender, created_at,
                       modified_at)
-VALUES (4, 2, 5, 3, 2, 'Subu Rakapatah', 'subu@teachpoint.com', 3, 'M', current_timestamp, current_timestamp);
+VALUES (4, 2, 5, 3, 2, 'Rakapatah', 'rakapatah@gmail.com', 3, 'M', current_timestamp, current_timestamp);
 
 INSERT INTO user_account (user_id, account_id)
 VALUES (1, 3);
