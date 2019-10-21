@@ -11,20 +11,15 @@ CREATE TABLE app_user(
 	modified_at TIMESTAMP NOT NULL,
 	partner INTEGER,
 	CONSTRAINT role_role_id_fkey FOREIGN KEY (role_id)
-	REFERENCES role (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION,
+	REFERENCES role (id) MATCH SIMPLE,
 	CONSTRAINT country_country_id_fkey FOREIGN KEY (country_id)
-	REFERENCES country (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION,
+	REFERENCES country (id) MATCH SIMPLE,
 	CONSTRAINT postal_code_postal_code_id_fkey FOREIGN KEY (postal_code_id)
-	REFERENCES postal_code (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION,
+	REFERENCES postal_code (id) MATCH SIMPLE,
 	CONSTRAINT hobby_hobby_id_fkey FOREIGN KEY (hobby_id)
-	REFERENCES hobby (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION,
+	REFERENCES hobby (id) MATCH SIMPLE,
 	CONSTRAINT image_image_id_fkey FOREIGN KEY (image_id)
 	REFERENCES image (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE role(
@@ -43,11 +38,9 @@ CREATE TABLE app_user_account(
 	account_id INTEGER NOT NULL,
 	PRIMARY KEY (app_user_id, account_id),
 	CONSTRAINT app_user_account_account_id_fkey FOREIGN KEY (account_id)
-	REFERENCES account (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION ,
+	REFERENCES account (id) MATCH SIMPLE,
 	CONSTRAINT app_user_app_user_id_fkey FOREIGN KEY (app_user_id)
 	REFERENCES app_user (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE country(
@@ -73,14 +66,11 @@ CREATE TABLE passport(
 	image_id INTEGER NOT NULL,
 	country_id INTEGER NOT NULL,
 	CONSTRAINT image_image_id_fkey FOREIGN KEY (image_id)
-	REFERENCES image (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION,
+	REFERENCES image (id) MATCH SIMPLE,
 	CONSTRAINT country_country_id_fkey FOREIGN KEY (country_id)
-	REFERENCES country (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION,
+	REFERENCES country (id) MATCH SIMPLE,
 	CONSTRAINT app_user_app_user_id_fkey FOREIGN KEY (app_user_id)
 	REFERENCES app_user (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE visa(
@@ -89,11 +79,9 @@ CREATE TABLE visa(
     country_id INTEGER NOT NULL,
     type VARCHAR(10),
 	CONSTRAINT passport_passport_id_fkey FOREIGN KEY (passport_id)
-	REFERENCES passport (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION,
+	REFERENCES passport (id) MATCH SIMPLE,
 	CONSTRAINT country_country_id_fkey FOREIGN KEY (country_id)
 	REFERENCES country (id) MATCH SIMPLE
-	ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE hobby(
