@@ -16,15 +16,15 @@ public interface UserCommonService {
 
     List<User> findUsersByRoleAndCountryInPassport(Role role, Country country);
 
-    void linkUserWIthTwitterAccount(User user, Account account);
+    boolean linkUserWIthTwitterAccount(User user, Account account);
 
-    void unlinkUserFromTwitterAccount(User user, Account account);
+    boolean unlinkUserFromTwitterAccount(User user, Account account);
 
-    void createAccountWithId(Long id);
+    boolean createAccountWithId(Long id);
 
-    void updateAccountById(Long id);
+    boolean updateAccountById(Long id);
 
-    void deleteCountById(Long id);
+    boolean deleteCountById(Long id);
 
     boolean deleteVisaFromUserPassportWhichLivesInAnotherCountry(User user, Visa visa);
 }
