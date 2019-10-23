@@ -47,16 +47,16 @@ VALUES (4, 'China', 'ISO 3166-2:CN');
 INSERT INTO country (id, name, iso_code)
 VALUES (5, 'USA', 'ISO 3166-2:US');
 
-INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner, gender, created_at,
+INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner_id, gender, created_at,
                       modified_at)
 VALUES (1, 1, 1, 2, 4, 'Sanya', 'sanya_boss@mail.ru', 2, 'M', current_timestamp, current_timestamp);
-INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner, gender, created_at,
+INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner_id, gender, created_at,
                       modified_at)
 VALUES (2, 2, 1, 2, 2, 'Valia', 'valia2002@mail.ru', 1, 'W', current_timestamp, current_timestamp);
-INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner, gender, created_at,
+INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner_id, gender, created_at,
                       modified_at)
 VALUES (3, 1, 4, 4, 3, 'Konfucyi', 'hello_world@yandex.ru', 4, 'M', current_timestamp, current_timestamp);
-INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner, gender, created_at,
+INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner_id, gender, created_at,
                       modified_at)
 VALUES (4, 2, 5, 3, 2, 'Rakapatah', 'rakapatah@gmail.com', 3, 'M', current_timestamp, current_timestamp);
 
