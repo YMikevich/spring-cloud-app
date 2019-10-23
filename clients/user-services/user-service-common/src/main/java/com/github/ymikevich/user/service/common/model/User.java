@@ -20,28 +20,6 @@ public class User {
     private Gender gender;
     private Passport passport;
 
-    public User() {
-    }
-
-    public User(Long id, Long partnerId, String name, String email, Country country, Role role, PostalCode postalCode,
-                List<Account> accounts, Hobby hobby, Byte[] image, LocalDateTime createdAt, LocalDateTime modifiedAt,
-                Gender gender, Passport passport) {
-        this.id = id;
-        this.partnerId = partnerId;
-        this.name = name;
-        this.email = email;
-        this.country = country;
-        this.role = role;
-        this.postalCode = postalCode;
-        this.accounts = accounts;
-        this.hobby = hobby;
-        this.image = image;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.gender = gender;
-        this.passport = passport;
-    }
-
     public Long getId() {
         return id;
     }

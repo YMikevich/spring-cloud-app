@@ -6,15 +6,6 @@ public class Visa {
     private String type;
     private Country country;
 
-    public Visa() {
-    }
-
-    public Visa(Long id, String type, Country country) {
-        this.id = id;
-        this.type = type;
-        this.country = country;
-    }
-
     public Long getId() {
         return id;
     }

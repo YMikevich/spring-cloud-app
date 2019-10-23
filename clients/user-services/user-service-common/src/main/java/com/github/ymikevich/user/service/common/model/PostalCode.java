@@ -5,14 +5,6 @@ public class PostalCode {
     private Long id;
     private String code;
 
-    public PostalCode() {
-    }
-
-    public PostalCode(Long id, String code) {
-        this.id = id;
-        this.code = code;
-    }
-
     public Long getId() {
         return id;
     }

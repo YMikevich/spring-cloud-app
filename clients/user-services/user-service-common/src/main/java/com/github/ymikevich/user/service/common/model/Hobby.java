@@ -1,19 +1,10 @@
 package com.github.ymikevich.user.service.common.model;
 
-public class Country {
+public class Hobby {
 
     private Long id;
     private String name;
-    private String isoCode;
-
-    public Country() {
-    }
-
-    public Country(Long id, String name, String isoCode) {
-        this.id = id;
-        this.name = name;
-        this.isoCode = isoCode;
-    }
+    private String description;
 
     public Long getId() {
         return id;
@@ -31,11 +22,11 @@ public class Country {
         this.name = name;
     }
 
-    public String getIsoCode() {
-        return isoCode;
+    public String getDescription() {
+        return description;
     }
 
-    public void setIsoCode(String isoCode) {
-        this.isoCode = isoCode;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

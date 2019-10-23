@@ -7,16 +7,6 @@ public class Account {
     private String email;
     private User user;
 
-    public Account() {
-    }
-
-    public Account(Long id, String nickname, String email, User user) {
-        this.id = id;
-        this.nickname = nickname;
-        this.email = email;
-        this.user = user;
-    }
-
     public Long getId() {
         return id;
     }
