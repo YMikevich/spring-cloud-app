@@ -5,7 +5,17 @@ public class Account {
     private Long id;
     private String nickname;
     private String email;
-    private User user;
+    private Long userId;
+
+    public Account() {
+    }
+
+    public Account(Long id, String nickname, String email, Long userId) {
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.userId = userId;
+    }
 
     public Long getId() {
         return id;
@@ -31,11 +41,11 @@ public class Account {
         this.email = email;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

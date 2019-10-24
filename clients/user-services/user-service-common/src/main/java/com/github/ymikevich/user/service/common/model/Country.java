@@ -6,6 +6,15 @@ public class Country {
     private String name;
     private String isoCode;
 
+    public Country() {
+    }
+
+    public Country(Long id, String name, String isoCode) {
+        this.id = id;
+        this.name = name;
+        this.isoCode = isoCode;
+    }
+
     public Long getId() {
         return id;
     }

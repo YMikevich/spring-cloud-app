@@ -6,9 +6,20 @@ public class Passport {
 
     private Long id;
     private byte[] image;
-    private  Country country;
+    private Country country;
     private String number;
     private List<Visa> visaList;
+
+    public Passport() {
+    }
+
+    public Passport(Long id, byte[] image, Country country, String number, List<Visa> visaList) {
+        this.id = id;
+        this.image = image;
+        this.country = country;
+        this.number = number;
+        this.visaList = visaList;
+    }
 
     public Long getId() {
         return id;
