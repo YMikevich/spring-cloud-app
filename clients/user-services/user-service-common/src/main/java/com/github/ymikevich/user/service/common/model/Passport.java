@@ -6,7 +6,7 @@ public class Passport {
 
     private Long id;
     private byte[] image;
-    private  Country country;
+    private Country country;
     private String number;
     private List<Visa> visaList;
 

@@ -5,7 +5,7 @@ public class Account {
     private Long id;
     private String nickname;
     private String email;
-    private User user;
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -31,11 +31,11 @@ public class Account {
         this.email = email;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

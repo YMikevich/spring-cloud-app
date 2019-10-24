@@ -14,7 +14,7 @@ public class User {
     private PostalCode postalCode;
     private List<Account> accounts;
     private Hobby hobby;
-    private Byte[] image;
+    private byte[] image;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private Gender gender;
@@ -92,11 +92,11 @@ public class User {
         this.hobby = hobby;
     }
 
-    public Byte[] getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(Byte[] image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
