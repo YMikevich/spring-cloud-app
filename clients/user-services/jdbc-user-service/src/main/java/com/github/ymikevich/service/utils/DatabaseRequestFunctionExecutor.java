@@ -18,10 +18,11 @@ public interface DatabaseRequestFunctionExecutor {
             return result;
         } catch (SQLException e) {
             rollbackConnection(connection, e);
+        } finally {
             try {
                 connection.close();
             } catch (SQLException ex) {
-                throw new DatabaseOperationException("Unexpected query execution error while closing connection", ex);
+                throw new DatabaseOperationException("Error while closing the connection after commit", ex);
             }
         }
         return null;
@@ -33,18 +34,13 @@ public interface DatabaseRequestFunctionExecutor {
             connection.setAutoCommit(false);
             consumer.accept(connection);
             connection.commit();
-            try {
-                connection.close();
-            }
-            catch (SQLException ex) {
-                throw new DatabaseOperationException("Error while closing the connection after commit", ex);
-            }
         } catch (SQLException e) {
             rollbackConnection(connection, e);
+        } finally {
             try {
                 connection.close();
             } catch (SQLException ex) {
-                throw new DatabaseOperationException("Unexpected query execution error while closing connection", ex);
+                throw new DatabaseOperationException("Error while closing the connection after commit", ex);
             }
         }
     }
