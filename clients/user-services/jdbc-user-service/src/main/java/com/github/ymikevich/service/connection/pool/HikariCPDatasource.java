@@ -27,14 +27,6 @@ public class HikariCPDatasource {
         dataSource = new HikariDataSource(config);
     }
 
-    public static Connection getConnection() {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
     private static void initProperties() {
         try (InputStream input = HikariCPDatasource.class.getClassLoader().getResourceAsStream("db.properties")) {
             properties = new Properties();
@@ -50,5 +42,13 @@ public class HikariCPDatasource {
     }
 
     private HikariCPDatasource() {
+    }
+
+    public static Connection getConnection() {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

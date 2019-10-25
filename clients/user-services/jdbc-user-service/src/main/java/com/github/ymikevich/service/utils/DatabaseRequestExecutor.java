@@ -6,7 +6,7 @@ import com.github.ymikevich.service.connection.pool.HikariCPDatasource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public interface DatabaseRequestFunctionExecutor {
+public interface DatabaseRequestExecutor {
 
     static <R> R execute(DatabaseRequestFunction<Connection, R> function) {
         var connection = HikariCPDatasource.getConnection();
@@ -35,8 +35,7 @@ public interface DatabaseRequestFunctionExecutor {
             connection.commit();
             try {
                 connection.close();
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 throw new DatabaseOperationException("Error while closing the connection after commit", ex);
             }
         } catch (SQLException e) {

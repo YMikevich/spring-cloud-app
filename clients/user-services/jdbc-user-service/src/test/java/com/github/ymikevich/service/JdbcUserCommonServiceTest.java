@@ -1,7 +1,7 @@
 package com.github.ymikevich.service;
 
 import com.github.ymikevich.service.utils.DatabaseRequestConsumer;
-import com.github.ymikevich.service.utils.DatabaseRequestFunctionExecutor;
+import com.github.ymikevich.service.utils.DatabaseRequestExecutor;
 import com.github.ymikevich.user.service.common.model.Gender;
 import com.github.ymikevich.user.service.common.model.User;
 import org.junit.After;
@@ -19,29 +19,40 @@ import static org.junit.Assert.assertNull;
 public class JdbcUserCommonServiceTest {
 
     //language=SQL
-    private static final String SQL_INSERT_ROLE = "INSERT INTO role (id, name)\n" +
-            "VALUES (?, ?)";
+    private static final String SQL_INSERT_ROLE = """
+            INSERT INTO role (id, name)
+            VALUES (?, ?)
+            """;
 
     //language=SQL
-    private static final String SQL_INSERT_USER = "INSERT INTO app_user (id, role_id, country_id, created_at, " +
-            "modified_at, name, partner_id, gender)\n" +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT_USER = """
+            INSERT INTO app_user (id, role_id, country_id, created_at,
+            modified_at, name, partner_id, gender)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """;
 
     //language=SQL
-    private static final String SQL_INSERT_COUNTRY = "INSERT INTO country (id, name, iso_code)\n" +
-            "VALUES (?, ?, ?)";
+    private static final String SQL_INSERT_COUNTRY = """
+            INSERT INTO country (id, name, iso_code)
+            VALUES (?, ?, ?)
+            """;
 
     //language=SQL
-    private static final String SQL_DELETE_USER = "DELETE FROM app_user";
+    private static final String SQL_DELETE_USER = """
+            DELETE FROM app_user
+            """;
 
     //language=SQL
-    private static final String SQL_DELETE_ROLE = "DELETE FROM role";
+    private static final String SQL_DELETE_ROLE = """
+            DELETE FROM role
+            """;
 
     //language=SQL
-    private static final String SQL_DELETE_COUNTRY = "DELETE FROM country";
+    private static final String SQL_DELETE_COUNTRY = """
+            DELETE FROM country
+            """;
 
     private JdbcUserCommonService service = new JdbcUserCommonService();
-    private Connection connection;
 
     @Before
     public void populateDatabase() {
@@ -80,7 +91,7 @@ public class JdbcUserCommonServiceTest {
             preparedStatement.execute();
         };
 
-        DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestConsumer);
+        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @After
@@ -90,7 +101,7 @@ public class JdbcUserCommonServiceTest {
             connection.prepareStatement(SQL_DELETE_ROLE).execute();
             connection.prepareStatement(SQL_DELETE_COUNTRY).execute();
         };
-        DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestConsumer);
+        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @Test

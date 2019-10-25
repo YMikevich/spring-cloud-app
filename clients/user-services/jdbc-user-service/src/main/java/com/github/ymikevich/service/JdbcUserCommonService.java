@@ -1,8 +1,8 @@
 package com.github.ymikevich.service;
 
 import com.github.ymikevich.service.utils.DatabaseRequestConsumer;
+import com.github.ymikevich.service.utils.DatabaseRequestExecutor;
 import com.github.ymikevich.service.utils.DatabaseRequestFunction;
-import com.github.ymikevich.service.utils.DatabaseRequestFunctionExecutor;
 import com.github.ymikevich.user.service.common.model.Account;
 import com.github.ymikevich.user.service.common.model.Country;
 import com.github.ymikevich.user.service.common.model.Gender;
@@ -21,81 +21,106 @@ import java.util.List;
 public class JdbcUserCommonService implements UserCommonService {
 
     //language=SQL
-    private static final String SQL_SELECT_ACCOUNTS_BY_USER_ID = "SELECT account.id AS account_id, " +
-            "account.nickname AS account_name, account.email AS account_email, user_account.user_id AS user_id \n" +
-            "FROM account\n" +
-            "JOIN user_account ON account.id = user_account.account_id\n" +
-            "JOIN app_user ON app_user.id = user_account.user_id " +
-            "WHERE app_user.id=?";
+    private static final String SQL_SELECT_ACCOUNTS_BY_USER_ID = """
+            SELECT account.id AS account_id,
+            account.nickname AS account_name, account.email AS account_email, user_account.user_id AS user_id
+            FROM account
+            JOIN user_account ON account.id = user_account.account_id
+            JOIN app_user ON app_user.id = user_account.user_id
+            WHERE app_user.id=?
+            """;
 
     //language=SQL
-    private static final String SQL_SELECT_ILLEGALS = "SELECT * FROM illegal_users WHERE country=?";
+    private static final String SQL_SELECT_ILLEGALS = """
+            SELECT * FROM illegal_users WHERE country=?
+            """;
 
     //language=SQL
-    private static final String SQL_SELECT_VISAS_IN_PASSPORT = "SELECT visa.id AS visa_id, visa.type AS visa_type," +
-            "country.id AS country_id, country.name AS country_name, country.iso_code AS country_iso_code \n" +
-            "FROM passport\n" +
-            "JOIN visa ON visa.passport_id=passport.id " +
-            "LEFT JOIN country ON visa.country_id = country.id\n" +
-            "WHERE passport.id=?";
+    private static final String SQL_SELECT_VISAS_IN_PASSPORT = """
+            SELECT visa.id AS visa_id, visa.type AS visa_type,
+            country.id AS country_id, country.name AS country_name, country.iso_code AS country_iso_cod
+            FROM passport
+            JOIN visa ON visa.passport_id=passport.id
+            LEFT JOIN country ON visa.country_id = country.id
+            WHERE passport.id=?
+            """;
 
     //language=SQL
-    private static final String SQL_SELECT_IMAGE_BY_ID = "SELECT * FROM image WHERE id=?";
+    private static final String SQL_SELECT_IMAGE_BY_ID = """
+            SELECT * FROM image WHERE id=?;
+            """;
+
 
     //language=SQL
-    private static final String SQL_SELECT_COUNTRY_BY_ID = "SELECT * FROM country WHERE id=?";
+    private static final String SQL_SELECT_COUNTRY_BY_ID = """
+            SELECT * FROM country WHERE id=?
+            """;
 
     //language=SQL
-    private static final String SQL_SELECT_USER_BY_ID = "SELECT " +
-            "app_user.id AS user_id, user_partner.id AS partner_id, app_user.name AS username, app_user.email, " +
-            "country.id AS country_id, country.name AS country, country.iso_code, role.name AS role, " +
-            "postal_code.id AS postal_code_id, postal_code.code AS postal_code, hobby.id AS hobby_id, " +
-            "hobby.name AS hobby_name, hobby.description AS hobby_description, app_user.created_at, app_user.modified_at, " +
-            "app_user.gender, passport.id AS passport_id, passport.country_id AS passport_country_id, " +
-            "passport.image_id AS passport_image_id, passport.number AS passport_number, app_user.image_id AS image_id\n" +
-            "FROM app_user\n" +
-            "LEFT JOIN passport ON passport.user_id = app_user.id\n" +
-            "LEFT JOIN visa ON visa.id = passport.id\n" +
-            "LEFT JOIN role ON role.id = app_user.role_id\n" +
-            "LEFT JOIN country ON app_user.country_id = country.id\n" +
-            "LEFT JOIN app_user AS user_partner ON app_user.id = user_partner.partner_id\n" +
-            "LEFT JOIN postal_code ON app_user.postal_code_id = postal_code.id\n" +
-            "LEFT JOIN hobby ON app_user.hobby_id = hobby.id\n" +
-            "LEFT JOIN image ON app_user.image_id = image.id\n" +
-            "WHERE app_user.id=?";
+    private static final String SQL_SELECT_USER_BY_ID = """
+            SELECT
+            app_user.id AS user_id, user_partner.id AS partner_id, app_user.name AS username, app_user.email,
+            country.id AS country_id, country.name AS country, country.iso_code, role.name AS role,
+            postal_code.id AS postal_code_id, postal_code.code AS postal_code, hobby.id AS hobby_id,
+            hobby.name AS hobby_name, hobby.description AS hobby_description, app_user.created_at, app_user.modified_at,
+            app_user.gender, passport.id AS passport_id, passport.country_id AS passport_country_id,
+            passport.image_id AS passport_image_id, passport.number AS passport_number, app_user.image_id AS image_id
+            FROM app_user
+            LEFT JOIN passport ON passport.user_id = app_user.id
+            LEFT JOIN visa ON visa.id = passport.id
+            LEFT JOIN role ON role.id = app_user.role_id
+            LEFT JOIN country ON app_user.country_id = country.id
+            LEFT JOIN app_user AS user_partner ON app_user.id = user_partner.partner_id
+            LEFT JOIN postal_code ON app_user.postal_code_id = postal_code.id
+            LEFT JOIN hobby ON app_user.hobby_id = hobby.id
+            LEFT JOIN image ON app_user.image_id = image.id
+            WHERE app_user.id=?
+            """;
 
     //language=SQL
-    private static final String SQL_INSERT_ACCOUNT = "INSERT INTO account (id, nickname, email)\n" +
-            "VALUES (?, ?, ?)";
+    private static final String SQL_INSERT_ACCOUNT = """
+            INSERT INTO account (id, nickname, email)
+            VALUES (?, ?, ?)
+            """;
 
     //language=SQL
-    private static final String SQL_UPDATE_ACCOUNT = "UPDATE account SET id=?, nickname=?, email=?\n" +
-            "WHERE id=?";
+    private static final String SQL_UPDATE_ACCOUNT = """
+            UPDATE account SET id=?, nickname=?, email=?
+            WHERE id=?
+            """;
 
     //language=SQL
-    private static final String SQL_DELETE_ACCOUNT = "DELETE FROM account WHERE id=?";
+    private static final String SQL_DELETE_ACCOUNT = """
+            DELETE FROM account WHERE id=?
+            """;
 
     //language=SQL
-    private static final String SQL_LINK_USER_AND_ACCOUNT = "INSERT INTO user_account (user_id, account_id)\n" +
-            "VALUES (?, ?)";
+    private static final String SQL_LINK_USER_AND_ACCOUNT = """
+            INSERT INTO user_account (user_id, account_id)
+            VALUES (?, ?)
+            """;
 
     //language=SQL
-    private static final String SQL_UNLINK_USER_AND_ACCOUNT = "DELETE FROM user_account WHERE user_id=? AND account_id=?";
+    private static final String SQL_UNLINK_USER_AND_ACCOUNT = """
+            DELETE FROM user_account WHERE user_id=? AND account_id=?
+            """;
 
     //language=SQL
-    private static final String SQL_SELECT_USERS_BY_ROLE_AND_COUNTRY = "SELECT app_user.id AS user_id\n" +
-            "FROM app_user\n" +
-            "LEFT JOIN country ON app_user.country_id=country.id\n" +
-            "JOIN role ON app_user.role_id=role.id\n" +
-            "WHERE role.name=? AND country_id=?";
+    private static final String SQL_SELECT_USERS_BY_ROLE_AND_COUNTRY = """
+            SELECT app_user.id AS user_id
+            FROM app_user
+            LEFT JOIN country ON app_user.country_id=country.id
+            JOIN role ON app_user.role_id=role.id
+            WHERE role.name=? AND country_id=?
+            """;
 
     //language=SQL
-    private static final String SQL_DELETE_VISA_IN_PASSPORT = "SELECT * FROM visa\n" +
-            "JOIN passport ON visa.passport_id=passport.id\n" +
-            "JOIN app_user ON passport.user_id=app_user.id\n" +
-            "WHERE app_user.country_id!=visa.country_id AND visa.id=? AND app_user.id=?";
-
-    private Connection connection;
+    private static final String SQL_DELETE_VISA_IN_PASSPORT = """
+            SELECT * FROM visa
+            JOIN passport ON visa.passport_id=passport.id
+            JOIN app_user ON passport.user_id=app_user.id
+            WHERE app_user.country_id!=visa.country_id AND visa.id=? AND app_user.id=?
+            """;
 
     @Override
     public List<Account> findAllAccountsByUserId(Long id) {
@@ -121,7 +146,7 @@ public class JdbcUserCommonService implements UserCommonService {
             return userAccounts;
         };
 
-        return DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestFunction);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
     @Override
@@ -141,7 +166,7 @@ public class JdbcUserCommonService implements UserCommonService {
             return illegals;
         };
 
-        return DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestFunction);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
     public User findUserById(Long userId) {
@@ -227,7 +252,7 @@ public class JdbcUserCommonService implements UserCommonService {
             return null;
         };
 
-        return DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestFunction);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
     public byte[] findImageById(Long imageId) {
@@ -238,14 +263,12 @@ public class JdbcUserCommonService implements UserCommonService {
             var resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                var image = resultSet.getBytes("image");
-                connection.commit();
-                return image;
+                return resultSet.getBytes("image");
             }
             return null;
         };
 
-        return DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestFunction);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
     public Country findCountryById(Long countryId) {
@@ -264,7 +287,7 @@ public class JdbcUserCommonService implements UserCommonService {
             return country;
         };
 
-        return DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestFunction);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
     public List<Visa> findAllVisasInPassport(Long passportId) {
@@ -297,7 +320,7 @@ public class JdbcUserCommonService implements UserCommonService {
             return visas;
         };
 
-        return DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestFunction);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
 
@@ -319,7 +342,7 @@ public class JdbcUserCommonService implements UserCommonService {
             return users;
         };
 
-        return DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestFunction);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
     @Override
@@ -332,7 +355,7 @@ public class JdbcUserCommonService implements UserCommonService {
             preparedStatement.execute();
         };
 
-        DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestConsumer);
+        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @Override
@@ -345,7 +368,7 @@ public class JdbcUserCommonService implements UserCommonService {
             preparedStatement.execute();
         };
 
-        DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestConsumer);
+        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @Override
@@ -359,7 +382,7 @@ public class JdbcUserCommonService implements UserCommonService {
             preparedStatement.execute();
         };
 
-        DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestConsumer);
+        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @Override
@@ -374,7 +397,7 @@ public class JdbcUserCommonService implements UserCommonService {
             preparedStatement.execute();
         };
 
-        DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestConsumer);
+        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @Override
@@ -386,7 +409,7 @@ public class JdbcUserCommonService implements UserCommonService {
             preparedStatement.execute();
         };
 
-        DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestConsumer);
+        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @Override
@@ -399,6 +422,6 @@ public class JdbcUserCommonService implements UserCommonService {
             preparedStatement.execute();
         };
 
-        DatabaseRequestFunctionExecutor.execute(accountDatabaseRequestConsumer);
+        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 }
