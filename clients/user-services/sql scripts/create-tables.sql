@@ -115,8 +115,15 @@ $$
     LANGUAGE PLPGSQL;
 
 CREATE VIEW illegal_users AS
-SELECT app_user.id AS user_id, user_partner.id AS partner_id, app_user.name AS username, app_user.email,
-       country.id AS country_id, country.name AS country, country.iso_code, role.name AS role, app_user.gender
+SELECT app_user.id     AS user_id,
+       user_partner.id AS partner_id,
+       app_user.name   AS username,
+       app_user.email,
+       country.id      AS country_id,
+       country.name    AS country,
+       country.iso_code,
+       role.name       AS role,
+       app_user.gender
 FROM app_user
          LEFT JOIN passport ON passport.user_id = app_user.id
          LEFT JOIN visa ON visa.id = passport.id

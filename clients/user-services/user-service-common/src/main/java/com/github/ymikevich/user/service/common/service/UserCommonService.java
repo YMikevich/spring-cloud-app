@@ -16,7 +16,7 @@ public interface UserCommonService {
 
     List<User> findUsersByRoleAndCountryInPassport(Role role, Long countryId);
 
-    void linkUserWIthTwitterAccount(Long userId, Long accountId);
+    void linkUserWithTwitterAccount(Long userId, Long accountId);
 
     void unlinkUserFromTwitterAccount(Long userId, Long accountId);
 

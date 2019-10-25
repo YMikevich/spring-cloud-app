@@ -7,6 +7,7 @@ import com.github.ymikevich.user.service.common.model.Account;
 import com.github.ymikevich.user.service.common.model.Country;
 import com.github.ymikevich.user.service.common.model.Gender;
 import com.github.ymikevich.user.service.common.model.Hobby;
+import com.github.ymikevich.user.service.common.model.Image;
 import com.github.ymikevich.user.service.common.model.Passport;
 import com.github.ymikevich.user.service.common.model.PostalCode;
 import com.github.ymikevich.user.service.common.model.Role;
@@ -22,8 +23,8 @@ public class JdbcUserCommonService implements UserCommonService {
 
     //language=SQL
     private static final String SQL_SELECT_ACCOUNTS_BY_USER_ID = """
-            SELECT account.id AS account_id,
-            account.nickname AS account_name, account.email AS account_email, user_account.user_id AS user_id
+            SELECT account.id AS account_id, account.nickname AS account_name, account.email AS account_email,
+            user_account.user_id AS user_id
             FROM account
             JOIN user_account ON account.id = user_account.account_id
             JOIN app_user ON app_user.id = user_account.user_id
@@ -38,7 +39,7 @@ public class JdbcUserCommonService implements UserCommonService {
     //language=SQL
     private static final String SQL_SELECT_VISAS_IN_PASSPORT = """
             SELECT visa.id AS visa_id, visa.type AS visa_type,
-            country.id AS country_id, country.name AS country_name, country.iso_code AS country_iso_cod
+            country.id AS country_id, country.name AS country_name, country.iso_code AS country_iso_code
             FROM passport
             JOIN visa ON visa.passport_id=passport.id
             LEFT JOIN country ON visa.country_id = country.id
@@ -116,10 +117,25 @@ public class JdbcUserCommonService implements UserCommonService {
 
     //language=SQL
     private static final String SQL_DELETE_VISA_IN_PASSPORT = """
-            SELECT * FROM visa
+            DELETE FROM visa
+            WHERE visa.id IN
+            (SELECT visa.id FROM visa
             JOIN passport ON visa.passport_id=passport.id
             JOIN app_user ON passport.user_id=app_user.id
             WHERE app_user.country_id!=visa.country_id AND visa.id=? AND app_user.id=?
+            )
+            """;
+
+    //language=SQL
+    private static final String SQL_SELECT_ACCOUNT = """
+            SELECT id, nickname, email FROM account
+            WHERE id=?
+            """;
+
+    //language=SQL
+    private static final String SQL_SELECT_USER_ACCOUNT = """
+            SELECT * FROM user_account
+            WHERE account_id=?
             """;
 
     @Override
@@ -210,7 +226,7 @@ public class JdbcUserCommonService implements UserCommonService {
                 }
 
                 var imageId = resultSet.getLong("image_id");
-                byte[] image = null;
+                Image image = null;
                 if (imageId != 0) {
                     image = findImageById(imageId);
                 }
@@ -226,11 +242,14 @@ public class JdbcUserCommonService implements UserCommonService {
                     passport.setId(resultSet.getLong("passport_id"));
                     passport.setCountry(findCountryById(resultSet.getLong("passport_country_id")));
 
-                    if (resultSet.getLong("passport_image_id") != 0) {
-                        passport.setImage(findImageById(resultSet.getLong("passport_image_id")));
+                    var passportImageId = resultSet.getLong("passport_image_id");
+                    Image passportImage = null;
+                    if (passportImageId != 0) {
+                        passportImage = findImageById(passportImageId);
                     }
+                    passport.setImage(passportImage);
                     passport.setNumber(resultSet.getString("passport_number"));
-                    passport.setVisaList(findAllVisasInPassport(resultSet.getLong("passport_id")));
+                    passport.setVisaList(findVisasInPassport(resultSet.getLong("passport_id")));
                 }
 
                 user.setId(userId);
@@ -255,15 +274,19 @@ public class JdbcUserCommonService implements UserCommonService {
         return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
-    public byte[] findImageById(Long imageId) {
-        DatabaseRequestFunction<Connection, byte[]> accountDatabaseRequestFunction = connection -> {
+    public Image findImageById(Long imageId) {
+        DatabaseRequestFunction<Connection, Image> accountDatabaseRequestFunction = connection -> {
             var preparedStatement = connection.prepareStatement(SQL_SELECT_IMAGE_BY_ID);
 
             preparedStatement.setLong(1, imageId);
             var resultSet = preparedStatement.executeQuery();
 
+            var image = new Image();
             if (resultSet.next()) {
-                return resultSet.getBytes("image");
+                image.setId(resultSet.getLong("id"));
+                image.setFileType(resultSet.getString("file_type"));
+                image.setImage(resultSet.getBytes("image"));
+                return image;
             }
             return null;
         };
@@ -290,7 +313,7 @@ public class JdbcUserCommonService implements UserCommonService {
         return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
-    public List<Visa> findAllVisasInPassport(Long passportId) {
+    public List<Visa> findVisasInPassport(Long passportId) {
         DatabaseRequestFunction<Connection, List<Visa>> accountDatabaseRequestFunction = connection -> {
             var preparedStatement = connection.prepareStatement(SQL_SELECT_VISAS_IN_PASSPORT);
 
@@ -323,6 +346,39 @@ public class JdbcUserCommonService implements UserCommonService {
         return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
     }
 
+    public Account findAccountById(Long accountId) {
+        DatabaseRequestFunction<Connection, Account> accountDatabaseRequestFunction = connection -> {
+            var preparedStatement = connection.prepareStatement(SQL_SELECT_ACCOUNT);
+
+            preparedStatement.setLong(1, accountId);
+            var resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+
+                var id = resultSet.getLong("id");
+                var nickname = resultSet.getString("nickname");
+                var email = resultSet.getString("email");
+                var userId = 0L;
+
+                preparedStatement = connection.prepareStatement(SQL_SELECT_USER_ACCOUNT);
+                preparedStatement.setLong(1, accountId);
+                resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    userId = resultSet.getLong("user_id");
+                }
+
+                var account = new Account();
+                account.setId(id);
+                account.setNickname(nickname);
+                account.setEmail(email);
+                account.setUserId(userId);
+                return account;
+            }
+            return null;
+        };
+
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
+    }
 
     @Override
     public List<User> findUsersByRoleAndCountryInPassport(Role role, Long countryId) {
@@ -346,7 +402,7 @@ public class JdbcUserCommonService implements UserCommonService {
     }
 
     @Override
-    public void linkUserWIthTwitterAccount(Long userId, Long accountId) {
+    public void linkUserWithTwitterAccount(Long userId, Long accountId) {
         DatabaseRequestConsumer<Connection> accountDatabaseRequestConsumer = connection -> {
             var preparedStatement = connection.prepareStatement(SQL_LINK_USER_AND_ACCOUNT);
 
@@ -403,9 +459,19 @@ public class JdbcUserCommonService implements UserCommonService {
     @Override
     public void deleteAccountById(Long id) {
         DatabaseRequestConsumer<Connection> accountDatabaseRequestConsumer = connection -> {
-            var preparedStatement = connection.prepareStatement(SQL_DELETE_ACCOUNT);
 
-            preparedStatement.setLong(1, id);
+            var accountToDelete = findAccountById(id);
+            if (accountToDelete == null) {
+                return;
+            }
+
+            var preparedStatement = connection.prepareStatement(SQL_UNLINK_USER_AND_ACCOUNT);
+            preparedStatement.setLong(1, accountToDelete.getUserId());
+            preparedStatement.setLong(2, accountToDelete.getId());
+            preparedStatement.execute();
+
+            preparedStatement = connection.prepareStatement(SQL_DELETE_ACCOUNT);
+            preparedStatement.setLong(1, accountToDelete.getId());
             preparedStatement.execute();
         };
 
