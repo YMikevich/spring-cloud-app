@@ -37,7 +37,8 @@ public class HikariCPDatasource {
             properties.load(input);
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            throw new IllegalStateException("Unexpected IO exception while loading property file(probably it's "
+                    + "not present)", ex);
         }
     }
 
@@ -48,7 +49,7 @@ public class HikariCPDatasource {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            throw new IllegalStateException("Unexpected SQL exception while retrieving connection", e);
         }
     }
 }

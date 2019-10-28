@@ -116,22 +116,15 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE VIEW illegal_users AS
-SELECT app_user.id     AS user_id,
-       user_partner.id AS partner_id,
-       app_user.name   AS username,
-       app_user.email,
-       country.id      AS country_id,
-       country.name    AS country,
-       country.iso_code,
-       role.name       AS role,
-       app_user.gender
+CREATE VIEW illegal_bisexuals AS
+SELECT app_user.id, app_user.name, country.name
 FROM app_user
          LEFT JOIN passport ON passport.user_id = app_user.id
          LEFT JOIN visa ON visa.id = passport.id
          LEFT JOIN role ON role.id = app_user.role_id
          LEFT JOIN country ON app_user.country_id = country.id
-         LEFT JOIN app_user AS user_partner ON app_user.id = user_partner.partner_id
+         LEFT JOIN app_user AS user_partner
+                   ON app_user.id = user_partner.partner_id
 WHERE (passport.user_id IS NULL
     OR (passport.user_id IS NOT NULL AND visa.id IS NULL AND visa.country_id != app_user.country_id))
   AND app_user.gender = user_partner.gender;

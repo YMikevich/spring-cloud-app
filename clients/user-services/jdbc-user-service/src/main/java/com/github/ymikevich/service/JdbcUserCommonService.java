@@ -1,8 +1,8 @@
 package com.github.ymikevich.service;
 
-import com.github.ymikevich.service.utils.DatabaseRequestConsumer;
-import com.github.ymikevich.service.utils.DatabaseRequestExecutor;
-import com.github.ymikevich.service.utils.DatabaseRequestFunction;
+import com.github.ymikevich.service.assist.DatabaseRequestConsumer;
+import com.github.ymikevich.service.assist.DatabaseRequestExecutor;
+import com.github.ymikevich.service.assist.DatabaseRequestFunction;
 import com.github.ymikevich.user.service.common.model.Account;
 import com.github.ymikevich.user.service.common.model.Country;
 import com.github.ymikevich.user.service.common.model.Gender;
