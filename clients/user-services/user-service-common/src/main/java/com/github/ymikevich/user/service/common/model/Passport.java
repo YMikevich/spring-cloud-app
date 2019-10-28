@@ -5,8 +5,8 @@ import java.util.List;
 public class Passport {
 
     private Long id;
-    private byte[] image;
-    private  Country country;
+    private Image image;
+    private Country country;
     private String number;
     private List<Visa> visaList;
 
@@ -18,11 +18,11 @@ public class Passport {
         this.id = id;
     }
 
-    public byte[] getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

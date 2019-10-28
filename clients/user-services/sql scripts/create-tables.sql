@@ -44,7 +44,7 @@ CREATE TABLE app_user
     created_at     TIMESTAMP           NOT NULL,
     modified_at    TIMESTAMP           NOT NULL,
     partner_id     INTEGER,
-    gender         VARCHAR(1)          NOT NULL,
+    gender         VARCHAR(5)          NOT NULL,
     CONSTRAINT role_role_id_fkey FOREIGN KEY (role_id)
         REFERENCES role (id) MATCH SIMPLE,
     CONSTRAINT country_country_id_fkey FOREIGN KEY (country_id)
@@ -114,15 +114,22 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE VIEW illegal_bisexuals AS
-SELECT app_user.id, app_user.name, country.name
+CREATE VIEW illegal_users AS
+SELECT app_user.id     AS user_id,
+       user_partner.id AS partner_id,
+       app_user.name   AS username,
+       app_user.email,
+       country.id      AS country_id,
+       country.name    AS country,
+       country.iso_code,
+       role.name       AS role,
+       app_user.gender
 FROM app_user
          LEFT JOIN passport ON passport.user_id = app_user.id
          LEFT JOIN visa ON visa.id = passport.id
          LEFT JOIN role ON role.id = app_user.role_id
          LEFT JOIN country ON app_user.country_id = country.id
-         LEFT JOIN app_user AS user_partner
-                   ON app_user.id = user_partner.partner_id
+         LEFT JOIN app_user AS user_partner ON app_user.id = user_partner.partner_id
 WHERE (passport.user_id IS NULL
     OR (passport.user_id IS NOT NULL AND visa.id IS NULL AND visa.country_id != app_user.country_id))
   AND app_user.gender = user_partner.gender;

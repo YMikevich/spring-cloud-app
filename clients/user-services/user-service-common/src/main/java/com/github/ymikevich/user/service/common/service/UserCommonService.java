@@ -12,19 +12,19 @@ public interface UserCommonService {
 
     List<Account> findAllAccountsByUserId(Long id);
 
-    List<User> findAllIllegalsFromCountry(Country country);
+    List<User> findAllIllegalsFromCountry(String countryName);
 
-    List<User> findUsersByRoleAndCountryInPassport(Role role, Country country);
+    List<User> findUsersByRoleAndCountryInPassport(Role role, Long countryId);
 
-    void linkUserWIthTwitterAccount(User user, Account account);
+    void linkUserWithTwitterAccount(Long userId, Long accountId);
 
-    void unlinkUserFromTwitterAccount(User user, Account account);
+    void unlinkUserFromTwitterAccount(Long userId, Long accountId);
 
-    void createAccountWithId(Long id);
+    void saveAccount(Account account);
 
-    void updateAccountById(Long id);
+    void updateAccountById(Long id, Account account);
 
-    void deleteCountById(Long id);
+    void deleteAccountById(Long id);
 
-    boolean deleteVisaFromUserPassportWhichLivesInAnotherCountry(User user, Visa visa);
+    void deleteVisaFromUserPassportWhichLivesInAnotherCountry(Long userId, Long visaId);
 }
