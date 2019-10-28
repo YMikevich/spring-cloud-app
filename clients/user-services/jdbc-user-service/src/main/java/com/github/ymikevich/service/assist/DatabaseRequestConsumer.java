@@ -1,4 +1,4 @@
-package com.github.ymikevich.service.utils;
+package com.github.ymikevich.service.assist;
 
 import java.sql.SQLException;
 

@@ -1,4 +1,4 @@
-package com.github.ymikevich.service.utils;
+package com.github.ymikevich.service.assist;
 
 import com.github.ymikevich.exceptions.DatabaseOperationException;
 import com.github.ymikevich.service.connection.pool.HikariCPDatasource;
