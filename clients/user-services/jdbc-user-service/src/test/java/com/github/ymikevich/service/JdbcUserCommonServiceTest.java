@@ -30,8 +30,8 @@ public class JdbcUserCommonServiceTest {
     //language=SQL
     private static final String SQL_INSERT_USER = """
             INSERT INTO app_user (id, role_id, country_id, created_at,
-            modified_at, name, partner_id, gender)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            modified_at, name, gender)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
 
     //language=SQL
@@ -109,6 +109,10 @@ public class JdbcUserCommonServiceTest {
     private static final String SQL_DELETE_VISA = """
             DELETE FROM visa
             """;
+    //language=SQL
+    private static final String SQL_UPDATE_USER_PARTNER = """
+            UPDATE app_user SET partner_id=? WHERE id=?
+            """;
 
     private JdbcUserCommonService service = new JdbcUserCommonService();
 
@@ -139,9 +143,9 @@ public class JdbcUserCommonServiceTest {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setString(6, "Sanya");
-            preparedStatement.setLong(7, 101L);
-            preparedStatement.setString(8, Gender.MAN.name());
+            preparedStatement.setString(7, Gender.MAN.name());
             preparedStatement.execute();
+
 
             preparedStatement = connection.prepareStatement(SQL_INSERT_USER);
             preparedStatement.setLong(1, 101L);
@@ -150,9 +154,16 @@ public class JdbcUserCommonServiceTest {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setString(6, "Dima");
-            preparedStatement.setLong(7, 100L);
-            preparedStatement.setString(8, Gender.MAN.name());
+            preparedStatement.setString(7, Gender.MAN.name());
             preparedStatement.execute();
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PARTNER);
+            preparedStatement.setLong(1, 101L);
+            preparedStatement.setLong(1, 100L);
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PARTNER);
+            preparedStatement.setLong(1, 100L);
+            preparedStatement.setLong(1, 101L);
 
             preparedStatement = connection.prepareStatement(SQL_INSERT_ACCOUNT);
             preparedStatement.setLong(1, 1L);

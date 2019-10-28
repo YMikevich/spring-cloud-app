@@ -1,13 +1,13 @@
 CREATE TABLE role
 (
     id   SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL
+    name VARCHAR(64) UNIQUE NOT NULL
 );
 
 CREATE TABLE country
 (
     id       SERIAL PRIMARY KEY,
-    name     VARCHAR(50) UNIQUE NOT NULL,
+    name     VARCHAR(64) UNIQUE NOT NULL,
     iso_code VARCHAR(13) UNIQUE NOT NULL
 );
 
@@ -20,14 +20,14 @@ CREATE TABLE postal_code
 CREATE TABLE hobby
 (
     id          SERIAL PRIMARY KEY,
-    name        VARCHAR(50) NOT NULL,
+    name        VARCHAR(64) NOT NULL,
     description VARCHAR(500)
 );
 
 CREATE TABLE image
 (
     id        SERIAL PRIMARY KEY,
-    file_type VARCHAR(10) NOT NULL,
+    file_type VARCHAR(64) NOT NULL,
     image     BYTEA       NOT NULL
 );
 
@@ -39,12 +39,12 @@ CREATE TABLE app_user
     postal_code_id INTEGER,
     hobby_id       INTEGER,
     image_id       INTEGER,
-    name           VARCHAR(50) UNIQUE  NOT NULL,
-    email          VARCHAR(100) UNIQUE NOT NULL,
+    name           VARCHAR(64) UNIQUE  NOT NULL,
+    email          VARCHAR(64) UNIQUE NOT NULL,
     created_at     TIMESTAMP           NOT NULL,
     modified_at    TIMESTAMP           NOT NULL,
     partner_id     INTEGER,
-    gender         VARCHAR(5)          NOT NULL,
+    gender         VARCHAR(64)          NOT NULL,
     CONSTRAINT role_role_id_fkey FOREIGN KEY (role_id)
         REFERENCES role (id) MATCH SIMPLE,
     CONSTRAINT country_country_id_fkey FOREIGN KEY (country_id)
@@ -54,14 +54,16 @@ CREATE TABLE app_user
     CONSTRAINT hobby_hobby_id_fkey FOREIGN KEY (hobby_id)
         REFERENCES hobby (id) MATCH SIMPLE,
     CONSTRAINT image_image_id_fkey FOREIGN KEY (image_id)
-        REFERENCES image (id) MATCH SIMPLE
+        REFERENCES image (id) MATCH SIMPLE,
+    CONSTRAINT user_partner_id_fkey FOREIGN KEY (partner_id)
+        REFERENCES app_user (id) MATCH SIMPLE
 );
 
 CREATE TABLE account
 (
     id       SERIAL PRIMARY KEY,
-    nickname VARCHAR(50) UNIQUE NOT NULL,
-    email    VARCHAR(50) UNIQUE
+    nickname VARCHAR(64) UNIQUE NOT NULL,
+    email    VARCHAR(64) UNIQUE
 );
 
 CREATE TABLE user_account
@@ -81,7 +83,7 @@ CREATE TABLE passport
     user_id    INTEGER     NOT NULL,
     image_id   INTEGER,
     country_id INTEGER     NOT NULL,
-    number     VARCHAR(20) NOT NULL,
+    number     VARCHAR(64) NOT NULL,
     CONSTRAINT image_image_id_fkey FOREIGN KEY (image_id)
         REFERENCES image (id) MATCH SIMPLE,
     CONSTRAINT country_country_id_fkey FOREIGN KEY (country_id)
@@ -95,7 +97,7 @@ CREATE TABLE visa
     id          SERIAL PRIMARY KEY,
     passport_id INTEGER NOT NULL,
     country_id  INTEGER NOT NULL,
-    type        VARCHAR(10),
+    type        VARCHAR(64),
     CONSTRAINT passport_passport_id_fkey FOREIGN KEY (passport_id)
         REFERENCES passport (id) MATCH SIMPLE,
     CONSTRAINT country_country_id_fkey FOREIGN KEY (country_id)
