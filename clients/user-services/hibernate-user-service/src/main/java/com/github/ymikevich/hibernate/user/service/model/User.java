@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -69,8 +70,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne(mappedBy = "user")
-    private Passport passport;
+    @OneToMany(mappedBy = "user")
+    private List<Passport> passport;
 
     public Integer getId() {
         return id;
@@ -176,11 +177,11 @@ public class User {
         this.gender = gender;
     }
 
-    public Passport getPassport() {
+    public List<Passport> getPassport() {
         return passport;
     }
 
-    public void setPassport(final Passport passport) {
+    public void setPassport(final List<Passport> passport) {
         this.passport = passport;
     }
 }
