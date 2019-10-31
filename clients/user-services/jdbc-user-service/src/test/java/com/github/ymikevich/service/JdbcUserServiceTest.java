@@ -6,12 +6,14 @@ import com.github.ymikevich.user.service.common.model.Account;
 import com.github.ymikevich.user.service.common.model.Gender;
 import com.github.ymikevich.user.service.common.model.Role;
 import com.github.ymikevich.user.service.common.model.User;
+import com.github.ymikevich.user.service.common.model.RoleName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +21,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class JdbcUserCommonServiceTest {
+public class JdbcUserServiceTest {
 
     //language=SQL
     private static final String SQL_INSERT_ROLE = """
@@ -114,7 +116,9 @@ public class JdbcUserCommonServiceTest {
             UPDATE app_user SET partner_id=? WHERE id=?
             """;
 
-    private JdbcUserCommonService service = new JdbcUserCommonService();
+
+
+    private JdbcUserService service = new JdbcUserService();
 
     @Before
     public void populateDatabase() {
@@ -224,6 +228,16 @@ public class JdbcUserCommonServiceTest {
     @After
     public void rollback() {
         DatabaseRequestConsumer<Connection> accountDatabaseRequestConsumer = connection -> {
+            var preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PARTNER);
+            preparedStatement.setNull(1, Types.INTEGER);
+            preparedStatement.setLong(2, 100L);
+            preparedStatement.execute();
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PARTNER);
+            preparedStatement.setNull(1, Types.INTEGER);
+            preparedStatement.setLong(2, 101L);
+            preparedStatement.execute();
+
             connection.prepareStatement(SQL_DELETE_VISA).execute();
             connection.prepareStatement(SQL_DELETE_PASSPORT).execute();
             connection.prepareStatement(SQL_DELETE_IMAGE).execute();
@@ -272,7 +286,7 @@ public class JdbcUserCommonServiceTest {
         //then
         for (User user : illegals) {
             assertNull(user.getPassport());
-            assertNotEquals(user.getRole().name(), "LOH");
+            assertNotEquals(user.getRole().getName().name(), "LOH");
         }
     }
 
@@ -311,7 +325,8 @@ public class JdbcUserCommonServiceTest {
     @Test
     public void findUsersByRoleAndCountryInPassport() {
         //given
-        var role = Role.READER;
+        var role = new Role();
+        role.setName(RoleName.READER);
         var countryId = 1L;
 
         //when

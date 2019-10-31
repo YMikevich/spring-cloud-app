@@ -8,7 +8,7 @@ import com.github.ymikevich.user.service.common.model.Visa;
 
 import java.util.List;
 
-public interface UserCommonService {
+public interface UserService {
 
     List<Account> findAllAccountsByUserId(Long id);
 
@@ -20,9 +20,9 @@ public interface UserCommonService {
 
     void unlinkUserFromTwitterAccount(Long userId, Long accountId);
 
-    void saveAccount(Account account);
+    Account saveAccount(Account account);
 
-    void updateAccountById(Long id, Account account);
+    Account updateAccountById(Long id, Account account);
 
     void deleteAccountById(Long id);
 

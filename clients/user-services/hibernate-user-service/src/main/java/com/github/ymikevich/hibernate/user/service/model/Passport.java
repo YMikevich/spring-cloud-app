@@ -1,5 +1,6 @@
 package com.github.ymikevich.hibernate.user.service.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,8 +31,8 @@ public class Passport {
 
     private String number;
 
-    @OneToMany(mappedBy = "passport")
-    private List<Visa> visaList;
+    @OneToMany(mappedBy = "passport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Visa> visaList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -74,5 +76,13 @@ public class Passport {
 
     public void setVisaList(final List<Visa> visaList) {
         this.visaList = visaList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

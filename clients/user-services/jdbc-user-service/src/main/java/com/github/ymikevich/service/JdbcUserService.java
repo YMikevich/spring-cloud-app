@@ -13,13 +13,14 @@ import com.github.ymikevich.user.service.common.model.PostalCode;
 import com.github.ymikevich.user.service.common.model.Role;
 import com.github.ymikevich.user.service.common.model.User;
 import com.github.ymikevich.user.service.common.model.Visa;
-import com.github.ymikevich.user.service.common.service.UserCommonService;
+import com.github.ymikevich.user.service.common.model.RoleName;
+import com.github.ymikevich.user.service.common.service.UserService;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcUserCommonService implements UserCommonService {
+public class JdbcUserService implements UserService {
 
     //language=SQL
     private static final String SQL_SELECT_ACCOUNTS_BY_USER_ID = """
@@ -61,7 +62,7 @@ public class JdbcUserCommonService implements UserCommonService {
     private static final String SQL_SELECT_USER_BY_ID = """
             SELECT
             app_user.id AS user_id, user_partner.id AS partner_id, app_user.name AS username, app_user.email,
-            country.id AS country_id, country.name AS country, country.iso_code, role.name AS role,
+            country.id AS country_id, country.name AS country, country.iso_code, role.name AS role, role.id AS role_id,
             postal_code.id AS postal_code_id, postal_code.code AS postal_code, hobby.id AS hobby_id,
             hobby.name AS hobby_name, hobby.description AS hobby_description, app_user.created_at, app_user.modified_at,
             app_user.gender, passport.id AS passport_id, passport.country_id AS passport_country_id,
@@ -205,7 +206,9 @@ public class JdbcUserCommonService implements UserCommonService {
                     userCountry.setIsoCode(resultSet.getString("iso_code"));
                 }
 
-                var role = Role.valueOf(resultSet.getString("role"));
+                var role = new Role();
+                role.setId(resultSet.getLong("role_id"));
+                role.setName(RoleName.valueOf(resultSet.getString("role")));
 
                 PostalCode postalCode = null;
                 if (resultSet.getLong("postal_code_id") != 0) {
@@ -385,7 +388,7 @@ public class JdbcUserCommonService implements UserCommonService {
         DatabaseRequestFunction<Connection, List<User>> accountDatabaseRequestFunction = connection -> {
             var preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_ROLE_AND_COUNTRY);
 
-            preparedStatement.setString(1, role.name());
+            preparedStatement.setString(1, role.getName().name());
             preparedStatement.setLong(2, countryId);
             var resultSet = preparedStatement.executeQuery();
 
@@ -428,22 +431,24 @@ public class JdbcUserCommonService implements UserCommonService {
     }
 
     @Override
-    public void saveAccount(Account account) {
-        DatabaseRequestConsumer<Connection> accountDatabaseRequestConsumer = connection -> {
+    public Account saveAccount(Account account) {
+        DatabaseRequestFunction<Connection, Account> accountDatabaseRequestConsumer = connection -> {
             var preparedStatement = connection.prepareStatement(SQL_INSERT_ACCOUNT);
 
             preparedStatement.setLong(1, account.getId());
             preparedStatement.setString(2, account.getNickname());
             preparedStatement.setString(3, account.getEmail());
             preparedStatement.execute();
+
+            return account;
         };
 
-        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @Override
-    public void updateAccountById(Long id, Account account) {
-        DatabaseRequestConsumer<Connection> accountDatabaseRequestConsumer = connection -> {
+    public Account updateAccountById(Long id, Account account) {
+        DatabaseRequestFunction<Connection, Account> accountDatabaseRequestConsumer = connection -> {
             var preparedStatement = connection.prepareStatement(SQL_UPDATE_ACCOUNT);
 
             preparedStatement.setLong(1, account.getId());
@@ -451,9 +456,11 @@ public class JdbcUserCommonService implements UserCommonService {
             preparedStatement.setString(3, account.getEmail());
             preparedStatement.setLong(4, id);
             preparedStatement.execute();
+
+            return account;
         };
 
-        DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestConsumer);
     }
 
     @Override

@@ -4,7 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,8 +20,13 @@ public class Account {
     private String nickname;
     private String email;
 
-    @ManyToMany(mappedBy = "accounts")
-    private List<User> users;
+    @ManyToMany
+    @JoinTable(
+            name = "user_account",
+            joinColumns = {@JoinColumn(name = "account_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    )
+    private List<User> users = new ArrayList<>();
 
     public Integer getId() {
         return id;

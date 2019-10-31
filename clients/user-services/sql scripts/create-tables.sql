@@ -34,17 +34,17 @@ CREATE TABLE image
 CREATE TABLE app_user
 (
     id             SERIAL PRIMARY KEY,
-    role_id        INTEGER             NOT NULL,
+    role_id        INTEGER            NOT NULL,
     country_id     INTEGER,
     postal_code_id INTEGER,
     hobby_id       INTEGER,
     image_id       INTEGER,
-    name           VARCHAR(64) UNIQUE  NOT NULL,
+    name           VARCHAR(64) UNIQUE NOT NULL,
     email          VARCHAR(64) UNIQUE NOT NULL,
-    created_at     TIMESTAMP           NOT NULL,
-    modified_at    TIMESTAMP           NOT NULL,
+    created_at     TIMESTAMP          NOT NULL,
+    modified_at    TIMESTAMP          NOT NULL,
     partner_id     INTEGER,
-    gender         VARCHAR(64)          NOT NULL,
+    gender         VARCHAR(64)        NOT NULL,
     CONSTRAINT role_role_id_fkey FOREIGN KEY (role_id)
         REFERENCES role (id) MATCH SIMPLE,
     CONSTRAINT country_country_id_fkey FOREIGN KEY (country_id)
@@ -125,9 +125,10 @@ FROM app_user
          LEFT JOIN country ON app_user.country_id = country.id
          LEFT JOIN app_user AS user_partner
                    ON app_user.id = user_partner.partner_id
-WHERE (passport.user_id IS NULL
-    OR (passport.user_id IS NOT NULL AND visa.id IS NULL AND visa.country_id != app_user.country_id))
-  AND app_user.gender = user_partner.gender;
+WHERE (passport.id IS NULL
+    OR (visa.id IS NULL AND visa.country_id != app_user.country_id))
+  AND app_user.gender = user_partner.gender
+  AND role.name != 'loh';
 
 CREATE FUNCTION name_changed() RETURNS TRIGGER
     LANGUAGE plpgsql

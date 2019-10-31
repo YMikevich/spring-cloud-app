@@ -1,5 +1,7 @@
 package com.github.ymikevich.hibernate.user.service.model;
 
+import com.github.ymikevich.user.service.common.model.Gender;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,7 +54,7 @@ public class User {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "account_id")}
     )
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "hobby_id")
@@ -71,7 +74,7 @@ public class User {
     private Gender gender;
 
     @OneToMany(mappedBy = "user")
-    private List<Passport> passport;
+    private List<Passport> passport = new ArrayList<>();
 
     public Integer getId() {
         return id;
