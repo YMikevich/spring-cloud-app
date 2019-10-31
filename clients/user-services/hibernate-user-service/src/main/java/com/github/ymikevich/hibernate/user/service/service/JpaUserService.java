@@ -22,7 +22,7 @@ public class JpaUserService implements UserService {
     private final EntityManager entityManager = EntityManagerProvider.getEntityManager();
 
     @Override
-    public List<com.github.ymikevich.user.service.common.model.Account> findAllAccountsByUserId(Long id) {
+    public List<com.github.ymikevich.user.service.common.model.Account> findAllAccountsByUserId(final Long id) {
         var criteriaBuilder = entityManager.getCriteriaBuilder();
         var criteriaQuery = criteriaBuilder.createQuery(Account.class);
         var userRoot = criteriaQuery.from(User.class);
@@ -33,7 +33,7 @@ public class JpaUserService implements UserService {
     }
 
     @Override
-    public List<com.github.ymikevich.user.service.common.model.User> findAllIllegalsFromCountry(String countryName) {
+    public List<com.github.ymikevich.user.service.common.model.User> findAllIllegalsFromCountry(final String countryName) {
         var criteriaBuilder = entityManager.getCriteriaBuilder();
         var criteriaQuery = criteriaBuilder.createQuery(User.class);
 
@@ -62,7 +62,7 @@ public class JpaUserService implements UserService {
 
     @Override
     public List<com.github.ymikevich.user.service.common.model.User> findUsersByRoleAndCountryInPassport(
-            com.github.ymikevich.user.service.common.model.Role role, Long countryId) {
+            final com.github.ymikevich.user.service.common.model.Role role, final Long countryId) {
         var criteriaBuilder = entityManager.getCriteriaBuilder();
         var criteriaQuery = criteriaBuilder.createQuery(User.class);
         var userRoot = criteriaQuery.from(User.class);
@@ -80,11 +80,10 @@ public class JpaUserService implements UserService {
     }
 
     @Override
-    public void linkUserWithTwitterAccount(Long userId, Long accountId) {
+    public void linkUserWithTwitterAccount(final Long userId, final Long accountId) {
         entityManager.getTransaction().begin();
-
-        var user = entityManager.find(User.class, userId.intValue());
-        var account = entityManager.find(Account.class, accountId.intValue());
+        var user = entityManager.find(User.class, userId);
+        var account = entityManager.find(Account.class, accountId);
 
         user.getAccounts().add(account);
         entityManager.merge(user);
@@ -92,11 +91,10 @@ public class JpaUserService implements UserService {
     }
 
     @Override
-    public void unlinkUserFromTwitterAccount(Long userId, Long accountId) {
+    public void unlinkUserFromTwitterAccount(final Long userId, final Long accountId) {
         entityManager.getTransaction().begin();
-
-        var user = entityManager.find(User.class, userId.intValue());
-        var account = entityManager.find(Account.class, accountId.intValue());
+        var user = entityManager.find(User.class, userId);
+        var account = entityManager.find(Account.class, accountId);
 
         user.getAccounts().remove(account);
         entityManager.merge(user);
@@ -104,7 +102,7 @@ public class JpaUserService implements UserService {
     }
 
     @Override
-    public com.github.ymikevich.user.service.common.model.Account saveAccount(com.github.ymikevich.user.service.common.model.Account account) {
+    public com.github.ymikevich.user.service.common.model.Account saveAccount(final com.github.ymikevich.user.service.common.model.Account account) {
         entityManager.getTransaction().begin();
         var accountToPersist = entityConverter.convert(account, Account.class);
         entityManager.persist(accountToPersist);
@@ -113,25 +111,26 @@ public class JpaUserService implements UserService {
     }
 
     @Override
-    public com.github.ymikevich.user.service.common.model.Account updateAccountById(Long id, com.github.ymikevich.user.service.common.model.Account account) {
+    public com.github.ymikevich.user.service.common.model.Account updateAccountById(final Long id, final com.github.ymikevich.user.service.common.model.Account account) {
         entityManager.getTransaction().begin();
-        var accountToUpdate = entityConverter.convert(account, Account.class);
-        entityManager.merge(accountToUpdate);
+        var accountToUpdate = entityManager.find(Account.class, id);
+        accountToUpdate.setEmail(account.getEmail());
+        accountToUpdate.setNickname(account.getNickname());
         entityManager.getTransaction().commit();
         return entityConverter.convert(accountToUpdate, com.github.ymikevich.user.service.common.model.Account.class);
     }
 
     @Override
-    public void deleteAccountById(Long id) {
+    public void deleteAccountById(final Long id) {
         entityManager.getTransaction().begin();
-        var accountToDelete = entityManager.find(Account.class, id.intValue());
+        var accountToDelete = entityManager.find(Account.class, id);
         entityManager.remove(accountToDelete);
         entityManager.getTransaction().commit();
     }
 
 
     @Override
-    public void deleteVisaFromUserPassportWhichLivesInAnotherCountry(Long userId, Long visaId) {
+    public void deleteVisaFromUserPassportWhichLivesInAnotherCountry(final Long userId, final Long visaId) {
         var criteriaBuilder = entityManager.getCriteriaBuilder();
         var criteriaDelete = criteriaBuilder.createCriteriaDelete(Visa.class);
         var visaRoot = criteriaDelete.from(Visa.class);

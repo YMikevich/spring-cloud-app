@@ -2,7 +2,6 @@ package com.github.ymikevich.hibernate.user.service.model;
 
 import com.github.ymikevich.user.service.common.model.RoleName;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,17 +14,16 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "integer")
-    private Integer id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final Integer id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 

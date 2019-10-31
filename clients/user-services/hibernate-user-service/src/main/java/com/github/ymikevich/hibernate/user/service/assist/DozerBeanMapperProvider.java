@@ -4,9 +4,11 @@ import org.dozer.DozerBeanMapper;
 
 import java.util.Collections;
 
-public class DozerBeanMapperProvider {
+public final class DozerBeanMapperProvider {
 
     private static DozerBeanMapper dozerBeanMapper;
+
+    private DozerBeanMapperProvider() { }
 
     public static DozerBeanMapper getDozerBeanMapper() {
         if (dozerBeanMapper == null) {

@@ -26,8 +26,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "integer")
-    private Integer id;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "partner_id")
@@ -76,11 +75,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Passport> passport = new ArrayList<>();
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final Integer id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 

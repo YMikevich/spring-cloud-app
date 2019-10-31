@@ -1,7 +1,6 @@
 package com.github.ymikevich.hibernate.user.service.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,8 +17,7 @@ public class Passport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "integer")
-    private Integer id;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "image_id")
@@ -38,11 +36,11 @@ public class Passport {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final Integer id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -82,7 +80,7 @@ public class Passport {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 }

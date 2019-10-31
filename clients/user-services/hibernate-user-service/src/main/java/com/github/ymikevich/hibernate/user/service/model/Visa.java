@@ -1,6 +1,5 @@
 package com.github.ymikevich.hibernate.user.service.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +13,7 @@ public class Visa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "integer")
-    private Integer id;
+    private Long id;
 
     private String type;
 
@@ -27,11 +25,11 @@ public class Visa {
     @JoinColumn(name = "passport_id")
     private Passport passport;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final Integer id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 

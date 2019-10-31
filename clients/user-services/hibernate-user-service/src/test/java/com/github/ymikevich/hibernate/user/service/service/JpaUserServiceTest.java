@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static java.util.Optional.ofNullable;
@@ -24,17 +25,16 @@ import static org.junit.Assert.assertNull;
 
 public class JpaUserServiceTest {
 
-    private Integer user1Id;
-    private Integer user2Id;
-    private Integer account1Id;
-    private Integer account2Id;
-    private Integer account3Id;
-    private Integer passportId;
-    private Integer visa1Id;
-    private Integer visa2Id;
-    private Integer countryId;
-
-
+    private Long user1Id;
+    private Long user2Id;
+    private Long account1Id;
+    private Long account2Id;
+    private Long account3Id;
+    private Long passportId;
+    private Long visa2Id;
+    private Long countryId;
+    private Long savedAccountId;
+    private EntityManager em = EntityManagerProvider.getEntityManager();
     private JpaUserService service = new JpaUserService();
 
     @Before
@@ -121,7 +121,6 @@ public class JpaUserServiceTest {
         visa1.setCountry(countryUsa);
         visa1.setPassport(passport);
         em.persist(visa1);
-        visa1Id = visa1.getId();
 
         var visa2 = new Visa();
         visa2.setCountry(countryBelarus);
@@ -133,7 +132,7 @@ public class JpaUserServiceTest {
 
     @After
     public void rollback() {
-        var em = EntityManagerProvider.getEntityManager();
+        em = EntityManagerProvider.getEntityManager();
         var deleteVisas = em.createQuery("DELETE FROM Visa");
         var deletePassports = em.createQuery("DELETE FROM Passport ");
         var deleteImages = em.createQuery("DELETE FROM Image ");
@@ -155,6 +154,7 @@ public class JpaUserServiceTest {
         ofNullable(em.find(Account.class, account1Id)).ifPresent(em::remove);
         ofNullable(em.find(Account.class, account2Id)).ifPresent(em::remove);
         ofNullable(em.find(Account.class, account3Id)).ifPresent(em::remove);
+        ofNullable(savedAccountId).ifPresent(savedAccountId -> em.remove(em.find(Account.class, savedAccountId)));
 
         em.remove(user1);
         em.remove(user2);
@@ -168,7 +168,7 @@ public class JpaUserServiceTest {
     @Test
     public void findAllAccountsByUserId() {
         //when
-        var accounts = service.findAllAccountsByUserId(Long.valueOf(user1Id));
+        var accounts = service.findAllAccountsByUserId(user1Id);
 
         //then
         assertEquals(accounts.size(), 2);
@@ -192,18 +192,18 @@ public class JpaUserServiceTest {
     @Test
     public void linkUserWithTwitterAccount() {
         //when
-        service.linkUserWithTwitterAccount(user1Id.longValue(), account2Id.longValue());
+        service.linkUserWithTwitterAccount(user1Id, account2Id);
 
         //then
-        var accounts = service.findAllAccountsByUserId(user1Id.longValue());
+        var accounts = service.findAllAccountsByUserId(user1Id);
         assertEquals(accounts.size(), 3);
     }
 
     @Test
     public void unlinkUserFromTwitterAccount() {
         //when
-        service.unlinkUserFromTwitterAccount(user1Id.longValue(), account3Id.longValue());
-        var accounts = service.findAllAccountsByUserId(user1Id.longValue());
+        service.unlinkUserFromTwitterAccount(user1Id, account3Id);
+        var accounts = service.findAllAccountsByUserId(user1Id);
 
         //then
         assertEquals(accounts.size(), 1);
@@ -214,15 +214,14 @@ public class JpaUserServiceTest {
         //given
         var account = new com.github.ymikevich.user.service.common.model.Account();
         account.setNickname("Ship");
-        var em = EntityManagerProvider.getEntityManager();
 
         //when
-        account = service.saveAccount(account);
+        var savedAccount = service.saveAccount(account);
+        savedAccountId = savedAccount.getId();
 
         //then
-        assertNotNull(account);
-        assertEquals(account.getId(), account.getId());
-        assertEquals(account.getNickname(), account.getNickname());
+        assertNotNull(savedAccount);
+        assertEquals(savedAccount.getNickname(), account.getNickname());
     }
 
     @Test
@@ -231,25 +230,20 @@ public class JpaUserServiceTest {
         var account = new com.github.ymikevich.user.service.common.model.Account();
         account.setNickname("Bred");
         account.setEmail("hello@gmail.com");
-        account.setUserId(100L);
-        var accountId = 1L;
         //todo delete user field in account common service
 
         //when
-        account = service.updateAccountById(accountId, account);
+        var savedAccount = service.updateAccountById(account1Id, account);
 
         //then
-        assertEquals(account.getId(), account.getId());
-        assertEquals(account.getNickname(), account.getNickname());
-        assertEquals(account.getEmail(), account.getEmail());
-
-        //todo create custom converter to convert integer to long or change ids in user common service into integer
+        assertEquals(savedAccount.getNickname(), account.getNickname());
+        assertEquals(savedAccount.getEmail(), account.getEmail());
     }
 
     @Test
     public void deleteAccountById() {
         //when
-        service.deleteAccountById(account1Id.longValue());
+        service.deleteAccountById(account1Id);
         var em = EntityManagerProvider.getEntityManager();
         var deletedAccount = em.find(Account.class, account1Id);
 
@@ -264,7 +258,7 @@ public class JpaUserServiceTest {
         role.setName(RoleName.READER);
 
         //when
-        var users = service.findUsersByRoleAndCountryInPassport(role, countryId.longValue());
+        var users = service.findUsersByRoleAndCountryInPassport(role, countryId);
 
         //then
         assertEquals(users.size(), 1);
@@ -273,7 +267,7 @@ public class JpaUserServiceTest {
     @Test
     public void deleteVisaFromUserPassportWhichLivesInAnotherCountry() {
         //when
-        service.deleteVisaFromUserPassportWhichLivesInAnotherCountry(user1Id.longValue(), visa2Id.longValue());
+        service.deleteVisaFromUserPassportWhichLivesInAnotherCountry(user1Id, visa2Id);
         var em = EntityManagerProvider.getEntityManager();
         em.getTransaction().begin();
         var passport = em.find(Passport.class, passportId);
@@ -282,6 +276,6 @@ public class JpaUserServiceTest {
 
         //then
         assertEquals(1, userVisas.size());
-        assertNotEquals(userVisas.get(0).getId(), Long.valueOf(visa1Id));
+        assertNotEquals(userVisas.get(0).getId(), visa2Id);
     }
 }

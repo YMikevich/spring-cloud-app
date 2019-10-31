@@ -13,8 +13,7 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "integer")
-    private Integer id;
+    private Long id;
 
     @Column(name = "file_type")
     private String fileType;
@@ -22,11 +21,11 @@ public class Image {
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] image;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final Integer id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
