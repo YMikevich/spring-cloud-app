@@ -17,7 +17,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "account", schema = "public")
 public class Account {
 
     @Id

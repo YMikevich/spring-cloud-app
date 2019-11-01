@@ -3,8 +3,5 @@ spring:
     url: jdbc:postgresql://172.23.0.2:5432/postgres
     username: postgres
     password: qwerty007
-  jpa:
-    hibernate:
-      ddl-auto: validate
 server:
   port: 8083
