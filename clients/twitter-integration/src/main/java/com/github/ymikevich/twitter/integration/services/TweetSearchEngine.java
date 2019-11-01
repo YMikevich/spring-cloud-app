@@ -1,6 +1,6 @@
 package com.github.ymikevich.twitter.integration.services;
 
-import com.github.ymikevich.twitter.integration.responses.TweetResponse;
+import com.github.ymikevich.twitter.integration.api.model.Tweet;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface TweetSearchEngine {
      * @param username the username
      * @return the list of tweets
      */
-    List<TweetResponse> findTweetsByUsername(String username);
+    List<Tweet> findRecentTweetsByUsername(String username);
 }

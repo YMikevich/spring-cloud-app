@@ -1,7 +1,7 @@
 package com.github.ymikevich.twitter.integration.services;
 
+import com.github.ymikevich.twitter.integration.api.model.Tweet;
 import com.github.ymikevich.twitter.integration.converters.StatusToTweetResponseConverter;
-import com.github.ymikevich.twitter.integration.responses.TweetResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class Twitter4jSearchEngine implements TweetSearchEngine {
     private final StatusToTweetResponseConverter statusToTweetResponseConverter;
 
     @Override
-    public List<TweetResponse> findTweetsByUsername(final String username) {
+    public List<Tweet> findRecentTweetsByUsername(final String username) {
         try {
             log.trace("Trying to get the list of tweets for user @" + username);
 

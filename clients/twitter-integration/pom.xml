@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -22,12 +22,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -69,7 +63,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
     </dependencies>
 
@@ -96,7 +90,8 @@
                     <encoding>UTF-8</encoding>
                     <consoleOutput>false</consoleOutput>
                     <configLocation>${basedir}/build-tools/quality/checkstyle/checkstyle.xml</configLocation>
-                    <suppressionsLocation>${basedir}/build-tools/quality/checkstyle/checkstyle-suppress.xml</suppressionsLocation>
+                    <suppressionsLocation>${basedir}/build-tools/quality/checkstyle/checkstyle-suppress.xml
+                    </suppressionsLocation>
                 </configuration>
             </plugin>
             <plugin>
@@ -126,6 +121,4 @@
             </plugin>
         </plugins>
     </reporting>
-
-
 </project>

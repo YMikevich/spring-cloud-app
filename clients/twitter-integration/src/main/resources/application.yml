@@ -1,0 +1,16 @@
+spring:
+  rabbitmq:
+    host: ${RABBIT_HOST}
+    username: ${RABBIT_USERNAME}
+    password: ${RABBIT_PASSWORD}
+twitter:
+  oauth:
+    consumerKey: ${TWITTER_CONSUMER_KEY}
+    consumerSecret: ${TWITTER_CONSUMER_SECRET}
+    accessToken: ${TWITTER_ACCESS_TOKEN}
+    accessTokenSecret: ${TWITTER_ACCESS_TOKEN_SECRET}
+rabbit:
+  routing_key:
+    name: 'tweets'
+  exchange:
+    name: 'tweets_exchange'

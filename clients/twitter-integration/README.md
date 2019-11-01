@@ -6,21 +6,6 @@ The service searches for tweets using twitter username.
 
 Searching is done by using Twitter4j SDK that uses Twitter API under the hood.
 
-## Build and run docker guide
-
-To build an image use command:
-docker build -t twitter-integration .
-
-To run the container use command:
-docker run --name twitter-integration \\\
--e twitter4j.oauth.consumerKey=your consumer key \\\
--e twitter4j.oauth.consumerSecret=your consumer secret \\\
--e twitter4j.oauth.accessToken=your access token \\\
--e twitter4j.oauth.accessTokenSecret=your access token secret \\\
--e twitter4j.debug=true \\\
--p 8080:8080 \\\
--v $HOME/twitter-integration/logs:clients/twitter-integration/logs twitter-integration
-
 ## Running the tests
 
 //todo add information about tests
