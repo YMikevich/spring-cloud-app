@@ -60,7 +60,7 @@ public interface DatabaseRequestExecutor {
             connection.rollback();
             throw new DatabaseOperationException("Query execution error, rollback successful", exception);
         } catch (SQLException ex) {
-            throw new DatabaseOperationException("Unexpected query execution error during rollback operation" ,exception);
+            throw new DatabaseOperationException("Unexpected query execution error during rollback operation", exception);
         }
     }
 }

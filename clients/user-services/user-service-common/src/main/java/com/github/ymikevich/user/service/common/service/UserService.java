@@ -1,10 +1,8 @@
 package com.github.ymikevich.user.service.common.service;
 
 import com.github.ymikevich.user.service.common.model.Account;
-import com.github.ymikevich.user.service.common.model.Country;
 import com.github.ymikevich.user.service.common.model.Role;
 import com.github.ymikevich.user.service.common.model.User;
-import com.github.ymikevich.user.service.common.model.Visa;
 
 import java.util.List;
 

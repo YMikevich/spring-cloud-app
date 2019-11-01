@@ -27,6 +27,9 @@ public class HikariCPDatasource {
         dataSource = new HikariDataSource(config);
     }
 
+    private HikariCPDatasource() {
+    }
+
     private static void initProperties() {
         try (InputStream input = HikariCPDatasource.class.getClassLoader().getResourceAsStream("db.properties")) {
             properties = new Properties();
@@ -40,9 +43,6 @@ public class HikariCPDatasource {
             throw new IllegalStateException("Unexpected IO exception while loading property file(probably it's "
                     + "not present)", ex);
         }
-    }
-
-    private HikariCPDatasource() {
     }
 
     public static Connection getConnection() {

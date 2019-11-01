@@ -11,9 +11,9 @@ import com.github.ymikevich.user.service.common.model.Image;
 import com.github.ymikevich.user.service.common.model.Passport;
 import com.github.ymikevich.user.service.common.model.PostalCode;
 import com.github.ymikevich.user.service.common.model.Role;
+import com.github.ymikevich.user.service.common.model.RoleName;
 import com.github.ymikevich.user.service.common.model.User;
 import com.github.ymikevich.user.service.common.model.Visa;
-import com.github.ymikevich.user.service.common.model.RoleName;
 import com.github.ymikevich.user.service.common.service.UserService;
 
 import java.sql.Connection;
@@ -30,6 +30,15 @@ public class JdbcUserService implements UserService {
             JOIN user_account ON account.id = user_account.account_id
             JOIN app_user ON app_user.id = user_account.user_id
             WHERE app_user.id=?
+            """;
+
+    //language=SQL
+    private static final String SQL_SELECT_USER_IDS_BY_ACCOUNT_ID = """
+            SELECT DISTINCT app_user.id AS user_id
+            FROM app_user
+            JOIN user_account ON app_user.id = user_account.user_id
+            JOIN account ON account.id = user_account.account_id
+            WHERE account.id=?
             """;
 
     //language=SQL
@@ -66,8 +75,11 @@ public class JdbcUserService implements UserService {
             postal_code.id AS postal_code_id, postal_code.code AS postal_code, hobby.id AS hobby_id,
             hobby.name AS hobby_name, hobby.description AS hobby_description, app_user.created_at, app_user.modified_at,
             app_user.gender, passport.id AS passport_id, passport.country_id AS passport_country_id,
-            passport.image_id AS passport_image_id, passport.number AS passport_number, app_user.image_id AS image_id
+            passport.image_id AS passport_image_id, passport.number AS passport_number, app_user.image_id AS image_id,
+            account.id AS account_id, account.nickname AS account_nickname, account.email AS account_email
             FROM app_user
+            JOIN user_account ON app_user.id = user_account.user_id
+            JOIN account ON account.id = user_account.account_id
             LEFT JOIN passport ON passport.user_id = app_user.id
             LEFT JOIN visa ON visa.id = passport.id
             LEFT JOIN role ON role.id = app_user.role_id
@@ -139,6 +151,24 @@ public class JdbcUserService implements UserService {
             WHERE account_id=?
             """;
 
+    public List<User> findAllUsersByAccountId(Long id) {
+        DatabaseRequestFunction<Connection, List<User>> accountDatabaseRequestFunction = connection -> {
+            var preparedStatement = connection.prepareStatement(SQL_SELECT_USER_IDS_BY_ACCOUNT_ID);
+            preparedStatement.setLong(1, id);
+
+            var resultSet = preparedStatement.executeQuery();
+            var accountUsers = new ArrayList<User>();
+
+            while (resultSet.next()) {
+                var user = findUserById(resultSet.getLong("user_id"));
+                accountUsers.add(user);
+            }
+            return accountUsers;
+        };
+
+        return DatabaseRequestExecutor.execute(accountDatabaseRequestFunction);
+    }
+
     @Override
     public List<Account> findAllAccountsByUserId(Long id) {
         DatabaseRequestFunction<Connection, List<Account>> accountDatabaseRequestFunction = connection -> {
@@ -152,12 +182,14 @@ public class JdbcUserService implements UserService {
                 var accountId = resultSet.getLong("account_id");
                 var nickname = resultSet.getString("account_name");
                 var email = resultSet.getString("account_email");
-                var userId = resultSet.getLong("user_id");
+
+                var users = findAllUsersByAccountId(accountId);
+
                 Account account = new Account();
                 account.setId(accountId);
                 account.setNickname(nickname);
                 account.setEmail(email);
-                account.setUserId(userId);
+                account.setUsers(users);
                 userAccounts.add(account);
             }
             return userAccounts;
@@ -217,8 +249,6 @@ public class JdbcUserService implements UserService {
                     postalCode.setCode(resultSet.getString("postal_code"));
                 }
 
-                var accounts = findAllAccountsByUserId(userId);
-
                 Hobby hobby = null;
                 if (resultSet.getLong("hobby_id") != 0) {
                     hobby = new Hobby();
@@ -254,6 +284,16 @@ public class JdbcUserService implements UserService {
                     passport.setNumber(resultSet.getString("passport_number"));
                     passport.setVisaList(findVisasInPassport(resultSet.getLong("passport_id")));
                 }
+
+                var accounts = new ArrayList<Account>();
+
+                do {
+                    var account = new Account();
+                    account.setId(resultSet.getLong("account_id"));
+                    account.setNickname(resultSet.getString("account_nickname"));
+                    account.setEmail(resultSet.getString("account_email"));
+                    accounts.add(account);
+                } while (resultSet.next());
 
                 user.setId(userId);
                 user.setAccounts(accounts);
@@ -357,24 +397,17 @@ public class JdbcUserService implements UserService {
             var resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-
                 var id = resultSet.getLong("id");
                 var nickname = resultSet.getString("nickname");
                 var email = resultSet.getString("email");
-                var userId = 0L;
 
-                preparedStatement = connection.prepareStatement(SQL_SELECT_USER_ACCOUNT);
-                preparedStatement.setLong(1, accountId);
-                resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    userId = resultSet.getLong("user_id");
-                }
+                var users = findAllUsersByAccountId(accountId);
 
                 var account = new Account();
                 account.setId(id);
                 account.setNickname(nickname);
                 account.setEmail(email);
-                account.setUserId(userId);
+                account.setUsers(users);
                 return account;
             }
             return null;
@@ -438,6 +471,10 @@ public class JdbcUserService implements UserService {
             preparedStatement.setLong(1, account.getId());
             preparedStatement.setString(2, account.getNickname());
             preparedStatement.setString(3, account.getEmail());
+            if (account.getUsers().size() > 0) {
+                account.getUsers().stream()
+                        .forEach(user -> linkUserWithTwitterAccount(user.getId(), account.getId()));
+            }
             preparedStatement.execute();
 
             return account;
@@ -455,6 +492,8 @@ public class JdbcUserService implements UserService {
             preparedStatement.setString(2, account.getNickname());
             preparedStatement.setString(3, account.getEmail());
             preparedStatement.setLong(4, id);
+            account.getUsers().stream()
+                    .forEach(user -> linkUserWithTwitterAccount(user.getId(), account.getId()));
             preparedStatement.execute();
 
             return account;
@@ -466,18 +505,14 @@ public class JdbcUserService implements UserService {
     @Override
     public void deleteAccountById(Long id) {
         DatabaseRequestConsumer<Connection> accountDatabaseRequestConsumer = connection -> {
-
             var accountToDelete = findAccountById(id);
             if (accountToDelete == null) {
                 return;
             }
+            accountToDelete.getUsers().stream()
+                    .forEach(user -> unlinkUserFromTwitterAccount(user.getId(), accountToDelete.getId()));
 
-            var preparedStatement = connection.prepareStatement(SQL_UNLINK_USER_AND_ACCOUNT);
-            preparedStatement.setLong(1, accountToDelete.getUserId());
-            preparedStatement.setLong(2, accountToDelete.getId());
-            preparedStatement.execute();
-
-            preparedStatement = connection.prepareStatement(SQL_DELETE_ACCOUNT);
+            var preparedStatement = connection.prepareStatement(SQL_DELETE_ACCOUNT);
             preparedStatement.setLong(1, accountToDelete.getId());
             preparedStatement.execute();
         };

@@ -5,8 +5,8 @@ import com.github.ymikevich.service.assist.DatabaseRequestExecutor;
 import com.github.ymikevich.user.service.common.model.Account;
 import com.github.ymikevich.user.service.common.model.Gender;
 import com.github.ymikevich.user.service.common.model.Role;
-import com.github.ymikevich.user.service.common.model.User;
 import com.github.ymikevich.user.service.common.model.RoleName;
+import com.github.ymikevich.user.service.common.model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -115,7 +116,6 @@ public class JdbcUserServiceTest {
     private static final String SQL_UPDATE_USER_PARTNER = """
             UPDATE app_user SET partner_id=? WHERE id=?
             """;
-
 
 
     private JdbcUserService service = new JdbcUserService();
@@ -388,7 +388,7 @@ public class JdbcUserServiceTest {
         account.setId(1L);
         account.setNickname("Bred");
         account.setEmail("hello@gmail.com");
-        account.setUserId(100L);
+        account.setUsers(List.of());
         var accountId = 1L;
 
         //when
@@ -426,7 +426,7 @@ public class JdbcUserServiceTest {
         var userVisas = service.findVisasInPassport(passportId);
 
         //then
-        assertEquals( 1, userVisas.size());
+        assertEquals(1, userVisas.size());
         assertNotEquals(userVisas.get(0).getId(), Long.valueOf(visaId));
     }
 }

@@ -1,11 +1,14 @@
 package com.github.ymikevich.user.service.common.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Account {
 
     private Long id;
     private String nickname;
     private String email;
-    private Long userId;
+    private List<User> users = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -31,11 +34,11 @@ public class Account {
         this.email = email;
     }
 
-    public Long getUserId() {
-        return userId;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }
