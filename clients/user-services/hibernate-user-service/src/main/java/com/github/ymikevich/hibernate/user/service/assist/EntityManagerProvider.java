@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public final class EntityManagerProvider {
 
-    private final static String PERSISTENCE_UNIT_NAME;
+    private static final String PERSISTENCE_UNIT_NAME;
     private static EntityManagerFactory factory;
     private static Properties properties;
 
