@@ -10,11 +10,11 @@ INSERT INTO hobby (id, name, description)
 VALUES (5, 'memes', 'observing all kind of memes');
 
 INSERT INTO role (id, name)
-VALUES (1, 'moderator');
+VALUES (1, 'MODERATOR');
 INSERT INTO role (id, name)
-VALUES (2, 'reader');
+VALUES (2, 'READER');
 INSERT INTO role (id, name)
-VALUES (3, 'loh');
+VALUES (3, 'LOH');
 
 INSERT INTO postal_code (id, code)
 VALUES (1, '228322');
@@ -47,18 +47,23 @@ VALUES (4, 'China', 'ISO 3166-2:CN');
 INSERT INTO country (id, name, iso_code)
 VALUES (5, 'USA', 'ISO 3166-2:US');
 
-INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner_id, gender, created_at,
+INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, gender, created_at,
                       modified_at)
-VALUES (1, 1, 1, 2, 4, 'Sanya', 'sanya_boss@mail.ru', 2, 'M', current_timestamp, current_timestamp);
-INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner_id, gender, created_at,
+VALUES (1, 1, 1, 2, 4, 'Sanya', 'sanya_boss@mail.ru', 'MAN', current_timestamp, current_timestamp);
+INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, gender, created_at,
                       modified_at)
-VALUES (2, 2, 1, 2, 2, 'Valia', 'valia2002@mail.ru', 1, 'W', current_timestamp, current_timestamp);
-INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner_id, gender, created_at,
+VALUES (2, 2, 1, 2, 2, 'Valia', 'valia2002@mail.ru', 'WOMAN', current_timestamp, current_timestamp);
+INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, gender, created_at,
                       modified_at)
-VALUES (3, 1, 4, 4, 3, 'Konfucyi', 'hello_world@yandex.ru', 4, 'M', current_timestamp, current_timestamp);
-INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, partner_id, gender, created_at,
+VALUES (3, 1, 4, 4, 3, 'Konfucyi', 'hello_world@yandex.ru', 'MAN', current_timestamp, current_timestamp);
+INSERT INTO app_user (id, role_id, country_id, postal_code_id, hobby_id, name, email, gender, created_at,
                       modified_at)
-VALUES (4, 2, 5, 3, 2, 'Rakapatah', 'rakapatah@gmail.com', 3, 'M', current_timestamp, current_timestamp);
+VALUES (4, 2, 5, 3, 2, 'Rakapatah', 'rakapatah@gmail.com', 'MAN', current_timestamp, current_timestamp);
+
+UPDATE app_user SET partner_id = 2 WHERE id=1;
+UPDATE app_user SET partner_id = 1 WHERE id=2;
+UPDATE app_user SET partner_id = 4 WHERE id=3;
+UPDATE app_user SET partner_id = 3 WHERE id=4;
 
 INSERT INTO user_account (user_id, account_id)
 VALUES (1, 3);

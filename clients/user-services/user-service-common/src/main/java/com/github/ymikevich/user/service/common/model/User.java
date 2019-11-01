@@ -1,6 +1,7 @@
 package com.github.ymikevich.user.service.common.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -12,7 +13,7 @@ public class User {
     private Country country;
     private Role role;
     private PostalCode postalCode;
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
     private Hobby hobby;
     private Image image;
     private LocalDateTime createdAt;

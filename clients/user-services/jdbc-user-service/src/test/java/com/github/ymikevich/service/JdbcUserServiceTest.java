@@ -5,6 +5,7 @@ import com.github.ymikevich.service.assist.DatabaseRequestExecutor;
 import com.github.ymikevich.user.service.common.model.Account;
 import com.github.ymikevich.user.service.common.model.Gender;
 import com.github.ymikevich.user.service.common.model.Role;
+import com.github.ymikevich.user.service.common.model.RoleName;
 import com.github.ymikevich.user.service.common.model.User;
 import org.junit.After;
 import org.junit.Before;
@@ -12,14 +13,16 @@ import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class JdbcUserCommonServiceTest {
+public class JdbcUserServiceTest {
 
     //language=SQL
     private static final String SQL_INSERT_ROLE = """
@@ -30,8 +33,8 @@ public class JdbcUserCommonServiceTest {
     //language=SQL
     private static final String SQL_INSERT_USER = """
             INSERT INTO app_user (id, role_id, country_id, created_at,
-            modified_at, name, partner_id, gender)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            modified_at, name, gender)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
 
     //language=SQL
@@ -109,8 +112,13 @@ public class JdbcUserCommonServiceTest {
     private static final String SQL_DELETE_VISA = """
             DELETE FROM visa
             """;
+    //language=SQL
+    private static final String SQL_UPDATE_USER_PARTNER = """
+            UPDATE app_user SET partner_id=? WHERE id=?
+            """;
 
-    private JdbcUserCommonService service = new JdbcUserCommonService();
+
+    private JdbcUserService service = new JdbcUserService();
 
     @Before
     public void populateDatabase() {
@@ -139,9 +147,9 @@ public class JdbcUserCommonServiceTest {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setString(6, "Sanya");
-            preparedStatement.setLong(7, 101L);
-            preparedStatement.setString(8, Gender.MAN.name());
+            preparedStatement.setString(7, Gender.MAN.name());
             preparedStatement.execute();
+
 
             preparedStatement = connection.prepareStatement(SQL_INSERT_USER);
             preparedStatement.setLong(1, 101L);
@@ -150,9 +158,16 @@ public class JdbcUserCommonServiceTest {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setString(6, "Dima");
-            preparedStatement.setLong(7, 100L);
-            preparedStatement.setString(8, Gender.MAN.name());
+            preparedStatement.setString(7, Gender.MAN.name());
             preparedStatement.execute();
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PARTNER);
+            preparedStatement.setLong(1, 101L);
+            preparedStatement.setLong(1, 100L);
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PARTNER);
+            preparedStatement.setLong(1, 100L);
+            preparedStatement.setLong(1, 101L);
 
             preparedStatement = connection.prepareStatement(SQL_INSERT_ACCOUNT);
             preparedStatement.setLong(1, 1L);
@@ -213,6 +228,16 @@ public class JdbcUserCommonServiceTest {
     @After
     public void rollback() {
         DatabaseRequestConsumer<Connection> accountDatabaseRequestConsumer = connection -> {
+            var preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PARTNER);
+            preparedStatement.setNull(1, Types.INTEGER);
+            preparedStatement.setLong(2, 100L);
+            preparedStatement.execute();
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PARTNER);
+            preparedStatement.setNull(1, Types.INTEGER);
+            preparedStatement.setLong(2, 101L);
+            preparedStatement.execute();
+
             connection.prepareStatement(SQL_DELETE_VISA).execute();
             connection.prepareStatement(SQL_DELETE_PASSPORT).execute();
             connection.prepareStatement(SQL_DELETE_IMAGE).execute();
@@ -261,7 +286,7 @@ public class JdbcUserCommonServiceTest {
         //then
         for (User user : illegals) {
             assertNull(user.getPassport());
-            assertNotEquals(user.getRole().name(), "LOH");
+            assertNotEquals(user.getRole().getName().name(), "LOH");
         }
     }
 
@@ -300,7 +325,8 @@ public class JdbcUserCommonServiceTest {
     @Test
     public void findUsersByRoleAndCountryInPassport() {
         //given
-        var role = Role.READER;
+        var role = new Role();
+        role.setName(RoleName.READER);
         var countryId = 1L;
 
         //when
@@ -362,7 +388,7 @@ public class JdbcUserCommonServiceTest {
         account.setId(1L);
         account.setNickname("Bred");
         account.setEmail("hello@gmail.com");
-        account.setUserId(100L);
+        account.setUsers(List.of());
         var accountId = 1L;
 
         //when
@@ -400,7 +426,7 @@ public class JdbcUserCommonServiceTest {
         var userVisas = service.findVisasInPassport(passportId);
 
         //then
-        assertEquals( 1, userVisas.size());
+        assertEquals(1, userVisas.size());
         assertNotEquals(userVisas.get(0).getId(), Long.valueOf(visaId));
     }
 }

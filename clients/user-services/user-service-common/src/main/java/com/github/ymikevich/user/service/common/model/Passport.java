@@ -1,5 +1,6 @@
 package com.github.ymikevich.user.service.common.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Passport {
@@ -8,7 +9,7 @@ public class Passport {
     private Image image;
     private Country country;
     private String number;
-    private List<Visa> visaList;
+    private List<Visa> visaList = new ArrayList<>();
 
     public Long getId() {
         return id;
