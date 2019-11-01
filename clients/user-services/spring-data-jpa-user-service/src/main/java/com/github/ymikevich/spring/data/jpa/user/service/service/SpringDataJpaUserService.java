@@ -55,7 +55,7 @@ public class SpringDataJpaUserService implements UserService {
 
     @Override
     public void deleteAccountById(Long id) {
-        accountRepository.deleteById(id);
+        accountRepository.deleteById(id.intValue());
     }
 
     @Override
