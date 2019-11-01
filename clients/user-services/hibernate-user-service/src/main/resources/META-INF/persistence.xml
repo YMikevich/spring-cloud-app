@@ -19,6 +19,7 @@
     <persistence-unit name="user-service-persistence-unit-test">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
+            <property name="hibernate.physical_naming_strategy" value="com.vladmihalcea.hibernate.type.util.CamelCaseToSnakeCaseNamingStrategy"/>
             <property name="dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
             <property name="show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>

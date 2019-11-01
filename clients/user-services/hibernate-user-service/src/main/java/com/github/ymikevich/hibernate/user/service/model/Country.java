@@ -15,7 +15,6 @@ public class Country {
 
     private String name;
 
-    @Column(name = "iso_code")
     private String isoCode;
 
     public Long getId() {

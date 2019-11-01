@@ -15,7 +15,6 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "file_type")
     private String fileType;
 
     @Type(type = "org.hibernate.type.BinaryType")
