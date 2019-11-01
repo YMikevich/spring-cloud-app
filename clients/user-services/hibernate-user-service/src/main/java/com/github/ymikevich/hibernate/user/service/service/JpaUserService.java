@@ -1,7 +1,6 @@
 package com.github.ymikevich.hibernate.user.service.service;
 
 import com.github.ymikevich.hibernate.user.service.assist.EntityManagerProvider;
-import com.github.ymikevich.hibernate.user.service.converter.EntityConverter;
 import com.github.ymikevich.hibernate.user.service.model.Account;
 import com.github.ymikevich.hibernate.user.service.model.Country;
 import com.github.ymikevich.hibernate.user.service.model.Passport;
@@ -10,15 +9,17 @@ import com.github.ymikevich.hibernate.user.service.model.User;
 import com.github.ymikevich.hibernate.user.service.model.Visa;
 import com.github.ymikevich.user.service.common.model.RoleName;
 import com.github.ymikevich.user.service.common.service.UserService;
+import org.modelmapper.ModelMapper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JpaUserService implements UserService {
 
-    private final EntityConverter entityConverter = new EntityConverter();
+    private final ModelMapper entityConverter = new ModelMapper();
     private final EntityManager entityManager = EntityManagerProvider.getEntityManager();
 
     @Override
@@ -29,7 +30,7 @@ public class JpaUserService implements UserService {
         criteriaQuery.where(criteriaBuilder.equal(userRoot.get("id"), id));
         Join<User, Account> accounts = userRoot.join("accounts");
         var query = entityManager.createQuery(criteriaQuery.select(accounts));
-        return entityConverter.convertList(query.getResultList(), com.github.ymikevich.user.service.common.model.Account.class);
+        return convertList(query.getResultList(), com.github.ymikevich.user.service.common.model.Account.class);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class JpaUserService implements UserService {
                 criteriaBuilder.and(gendersIsEqual, roleNotLoh, countryToSearch));
 
         var query = entityManager.createQuery(criteriaQuery.select(userRoot).where(finalPredicate));
-        return entityConverter.convertList(query.getResultList(),
+        return convertList(query.getResultList(),
                 com.github.ymikevich.user.service.common.model.User.class);
     }
 
@@ -75,7 +76,7 @@ public class JpaUserService implements UserService {
         criteriaQuery.select(userRoot).where(finalPredicate);
 
         var query = entityManager.createQuery(criteriaQuery);
-        return entityConverter.convertList(query.getResultList(),
+        return convertList(query.getResultList(),
                 com.github.ymikevich.user.service.common.model.User.class);
     }
 
@@ -104,10 +105,10 @@ public class JpaUserService implements UserService {
     @Override
     public com.github.ymikevich.user.service.common.model.Account saveAccount(final com.github.ymikevich.user.service.common.model.Account account) {
         entityManager.getTransaction().begin();
-        var accountToPersist = entityConverter.convert(account, Account.class);
+        var accountToPersist = entityConverter.map(account, Account.class);
         entityManager.persist(accountToPersist);
         entityManager.getTransaction().commit();
-        return entityConverter.convert(accountToPersist, com.github.ymikevich.user.service.common.model.Account.class);
+        return entityConverter.map(accountToPersist, com.github.ymikevich.user.service.common.model.Account.class);
     }
 
     @Override
@@ -117,7 +118,7 @@ public class JpaUserService implements UserService {
         accountToUpdate.setEmail(account.getEmail());
         accountToUpdate.setNickname(account.getNickname());
         entityManager.getTransaction().commit();
-        return entityConverter.convert(accountToUpdate, com.github.ymikevich.user.service.common.model.Account.class);
+        return entityConverter.map(accountToUpdate, com.github.ymikevich.user.service.common.model.Account.class);
     }
 
     @Override
@@ -149,5 +150,9 @@ public class JpaUserService implements UserService {
 
         entityManager.createQuery(criteriaDelete.where(visaRoot.in(subQuery))).executeUpdate();
         entityManager.getTransaction().commit();
+    }
+
+    public <F, T> List<T> convertList(final List<F> from, final Class<T> targetClass) {
+        return from.stream().map(it -> entityConverter.map(it, targetClass)).collect(Collectors.toList());
     }
 }
