@@ -1,4 +1,10 @@
 spring:
+  application:
+    name: es-integration
+  cloud:
+    config:
+      name: es-integration
+      uri: http://localhost:8888
   rabbitmq:
     host: ${RABBIT_HOST}
     username: ${RABBIT_USERNAME}
@@ -7,8 +13,3 @@ spring:
     elasticsearch:
       cluster-nodes: ${ELASTIC_HOST}
       cluster-name: ${ELASTIC_CLUSTER_NAME}
-rabbit:
-  queue:
-    name: 'tweets'
-server:
-  port: 8081

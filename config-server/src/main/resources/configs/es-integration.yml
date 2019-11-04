@@ -1,0 +1,10 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: es-integration
+
+rabbit:
+  queue:
+    name: 'tweets'
