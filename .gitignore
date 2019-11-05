@@ -7,5 +7,5 @@ out/
 # Editor-based Rest Client
 .idea/httpRequests
 
- # env files
- *.env
+# env files
+/local.env

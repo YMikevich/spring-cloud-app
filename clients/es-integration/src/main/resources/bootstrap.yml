@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: es-integration
+  cloud:
+    config:
+      name: es-integration
+      uri: http://localhost:8888

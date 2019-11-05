@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: spring-data-jpa-user-service
+  cloud:
+    config:
+      name: spring-data-jpa-user-service
+      uri: http://localhost:8888
