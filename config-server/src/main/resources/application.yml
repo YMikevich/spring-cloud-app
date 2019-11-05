@@ -4,18 +4,20 @@ server:
 spring:
   application:
     name: config-server
-  profiles:
-    active: native
   cloud:
     config:
       server:
-        native:
-          searchLocations: classpath:configs/
+        git:
+          uri: git@github.com:YMikevich/tweet-analyzer-configs.git
+          clone-on-start: true
+
 eureka:
   instance:
     hostname: localhost
   client:
     registerWithEureka: true
     fetchRegistry: false
+    healthcheck:
+      enabled: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
