@@ -1,7 +1,7 @@
 package com.github.ymikevich.spring.data.jpa.user.service.controllers;
 
 import com.github.ymikevich.spring.data.jpa.user.service.responses.AccountResponse;
-import com.github.ymikevich.spring.data.jpa.user.service.service.SpringDataJpaUserService;
+import com.github.ymikevich.user.service.common.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-public class UserServiceController {
+public class ServiceController {
 
-    private final SpringDataJpaUserService service;
+    private final UserService service;
     private final ModelMapper modelMapper;
 
     @GetMapping("accounts/users/{id}")

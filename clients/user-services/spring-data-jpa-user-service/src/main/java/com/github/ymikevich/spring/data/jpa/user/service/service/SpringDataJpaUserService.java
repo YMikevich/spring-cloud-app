@@ -22,7 +22,7 @@ public class SpringDataJpaUserService implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<com.github.ymikevich.user.service.common.model.Account> findAllAccountsByUserId(Long id) {
+    public List<com.github.ymikevich.user.service.common.model.Account> findAllAccountsByUserId(final Long id) {
         return userRepository.findById(id.intValue())
                 .map(user -> user.getAccounts())
                 .map(this::toCommonModel)
@@ -30,48 +30,50 @@ public class SpringDataJpaUserService implements UserService {
     }
 
     @Override
-    public List<com.github.ymikevich.user.service.common.model.User> findAllIllegalsFromCountry(String countryName) {
+    public List<com.github.ymikevich.user.service.common.model.User> findAllIllegalsFromCountry(final String countryName) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<com.github.ymikevich.user.service.common.model.User> findUsersByRoleAndCountryInPassport(com.github.ymikevich.user.service.common.model.Role role, Long countryId) {
+    public List<com.github.ymikevich.user.service.common.model.User> findUsersByRoleAndCountryInPassport(final com.github.ymikevich.user.service.common.model.Role role,
+                                                                                                         final Long countryId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void linkUserWithTwitterAccount(Long userId, Long accountId) {
+    public void linkUserWithTwitterAccount(final Long userId, final Long accountId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void unlinkUserFromTwitterAccount(Long userId, Long accountId) {
+    public void unlinkUserFromTwitterAccount(final Long userId, final Long accountId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public com.github.ymikevich.user.service.common.model.Account saveAccount(com.github.ymikevich.user.service.common.model.Account account) {
+    public com.github.ymikevich.user.service.common.model.Account saveAccount(final com.github.ymikevich.user.service.common.model.Account account) {
         return modelMapper.map(accountRepository.save(modelMapper.map(account, Account.class)),
                 com.github.ymikevich.user.service.common.model.Account.class);
     }
 
     @Override
-    public com.github.ymikevich.user.service.common.model.Account updateAccountById(Long id, com.github.ymikevich.user.service.common.model.Account account) {
+    public com.github.ymikevich.user.service.common.model.Account updateAccountById(final Long id,
+                                                                                    final com.github.ymikevich.user.service.common.model.Account account) {
         return modelMapper.map(accountRepository.save(modelMapper.map(account, Account.class)),
                 com.github.ymikevich.user.service.common.model.Account.class);
     }
 
     @Override
-    public void deleteAccountById(Long id) {
+    public void deleteAccountById(final Long id) {
         accountRepository.deleteById(id.intValue());
     }
 
     @Override
-    public void deleteVisaFromUserPassportWhichLivesInAnotherCountry(Long userId, Long visaId) {
+    public void deleteVisaFromUserPassportWhichLivesInAnotherCountry(final Long userId, final Long visaId) {
         throw new UnsupportedOperationException();
     }
 
-    private List<com.github.ymikevich.user.service.common.model.Account> toCommonModel(List<Account> accounts) {
+    private List<com.github.ymikevich.user.service.common.model.Account> toCommonModel(final List<Account> accounts) {
         return accounts.stream()
                 .map(account -> modelMapper.map(account, com.github.ymikevich.user.service.common.model.Account.class))
                 .collect(Collectors.toList());
