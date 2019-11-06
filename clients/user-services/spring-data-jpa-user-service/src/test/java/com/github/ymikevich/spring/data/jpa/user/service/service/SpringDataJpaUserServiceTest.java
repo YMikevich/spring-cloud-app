@@ -1,14 +1,19 @@
 package com.github.ymikevich.spring.data.jpa.user.service.service;
 
+import com.github.ymikevich.spring.data.jpa.user.service.model.User;
 import com.github.ymikevich.spring.data.jpa.user.service.repositories.AccountRepository;
+import com.github.ymikevich.spring.data.jpa.user.service.repositories.UserRepository;
 import com.github.ymikevich.user.service.common.model.Account;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class SpringDataJpaUserServiceTest {
+public class SpringDataJpaUserServiceTest {
 
     @Autowired
     SpringDataJpaUserService service;
@@ -24,8 +29,14 @@ class SpringDataJpaUserServiceTest {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
+
     @Test
-    void saveAccount() {
+    public void saveAccount() {
         //given
         var accountToSave = new Account();
         accountToSave.setId(1L);
@@ -43,7 +54,7 @@ class SpringDataJpaUserServiceTest {
     }
 
     @Test
-    void updateAccountById() {
+    public void updateAccountById() {
         //given
         var account = new Account();
         account.setId(1L);
@@ -61,7 +72,7 @@ class SpringDataJpaUserServiceTest {
     }
 
     @Test
-    void deleteAccountById() {
+    public void deleteAccountById() {
         //given
         var account = new Account();
         account.setId(1L);
@@ -73,5 +84,42 @@ class SpringDataJpaUserServiceTest {
         //when
         service.deleteAccountById(savedAccount.getId());
         assertTrue(accountRepository.findById(1).isEmpty());
+    }
+
+    @Test
+    public void findAllAccountsByUserId() {
+        //given
+        var account1 = new Account();
+        account1.setId(1L);
+        account1.setEmail("hello@mail.com");
+        account1.setNickname("Bred");
+        account1.setUsers(List.of());
+
+        var account2 = new Account();
+        account2.setId(2L);
+        account2.setEmail("he@mail.com");
+        account2.setNickname("Jack");
+        account2.setUsers(List.of());
+        service.saveAccount(account1);
+        service.saveAccount(account2);
+
+
+        var accounts = new ArrayList<Account>();
+        accounts.add(account1);
+        accounts.add(account2);
+
+        var user = new User();
+        user.setId(1);
+        user.setAccounts(accounts.stream()
+                .map(account -> modelMapper.map(account, com.github.ymikevich.spring.data.jpa.user.service.model.Account.class))
+                .collect(Collectors.toList()));
+
+        userRepository.save(user);
+
+        //when
+        var userAccounts = service.findAllAccountsByUserId(1L);
+
+        //then
+        assertEquals(userAccounts.size(), accounts.size());
     }
 }

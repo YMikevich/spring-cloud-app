@@ -15,4 +15,6 @@ public interface TwitterService {
      * @return the list
      */
     List<Tweet> findAndProduceTweetsByUsername(String username);
+
+    void sync(Long userId);
 }
