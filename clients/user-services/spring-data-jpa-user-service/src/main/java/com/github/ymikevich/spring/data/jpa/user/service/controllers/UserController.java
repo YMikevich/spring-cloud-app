@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-public class ServiceController {
+public class UserController {
 
     private final UserService service;
     private final ModelMapper modelMapper;

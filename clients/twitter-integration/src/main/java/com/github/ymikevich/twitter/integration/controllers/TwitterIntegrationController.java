@@ -1,6 +1,6 @@
 package com.github.ymikevich.twitter.integration.controllers;
 
-import com.github.ymikevich.twitter.integration.services.TwitterService;
+import com.github.ymikevich.twitter.integration.services.TwitterSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class TwitterIntegrationController {
 
-    private final TwitterService twitterService;
+    private final TwitterSyncService twitterSyncService;
 
     @GetMapping("/sync/{userId}")
     public void sync(@PathVariable final Long userId) {
-        twitterService.sync(userId);
+        twitterSyncService.sync(userId);
     }
 }

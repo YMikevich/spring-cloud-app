@@ -1,6 +1,5 @@
 package com.github.ymikevich.twitter.integration.services;
 
-import com.github.ymikevich.twitter.integration.api.model.Tweet;
 import com.github.ymikevich.twitter.integration.api.model.responses.AccountResponse;
 import com.github.ymikevich.twitter.integration.feign.clients.UserClient;
 import com.github.ymikevich.twitter.integration.messaging.producers.TweetProducer;
@@ -9,8 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static java.util.Optional.ofNullable;
+import java.util.stream.Collectors;
 
 /**
  * The type Default twitter service.
@@ -18,26 +16,21 @@ import static java.util.Optional.ofNullable;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class DefaultTwitterService implements TwitterService {
+public class DefaultTwitterSyncService implements TwitterSyncService {
 
+    private final UserClient userClient;
     private final TweetSearchEngine tweetSearchEngine;
     private final TweetProducer tweetProducer;
-    private final UserClient userClient;
-
-    @Override
-    public List<Tweet> produceTweetsByUsername(final String username) {
-        var tweets = tweetSearchEngine.findRecentTweetsByUsername(username);
-        log.trace("Sending tweets via rabbitMQ");
-        tweetProducer.produce(tweets);
-
-        return tweets;
-    }
 
     @Override
     public void sync(final Long userId) {
         var userAccounts = userClient.getAccountsByUserId(userId);
-        userAccounts.stream()
+        produceTweetsByUsername(userAccounts.stream()
                 .map(AccountResponse::getNickname)
-                .forEach(this::produceTweetsByUsername);
+                .collect(Collectors.toList()));
+    }
+
+    private void produceTweetsByUsername(final List<String> usernames) {
+        usernames.forEach(username -> tweetProducer.produce(tweetSearchEngine.findRecentTweetsByUsername(username)));
     }
 }
