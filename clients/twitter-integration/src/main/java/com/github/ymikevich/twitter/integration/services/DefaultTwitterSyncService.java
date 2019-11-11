@@ -7,9 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * The type Default twitter service.
  */
@@ -25,12 +22,12 @@ public class DefaultTwitterSyncService implements TwitterSyncService {
     @Override
     public void sync(final Long userId) {
         var userAccounts = userClient.getAccountsByUserId(userId);
-        produceTweetsByUsername(userAccounts.stream()
+        userAccounts.stream()
                 .map(AccountResponse::getNickname)
-                .collect(Collectors.toList()));
+                .forEach(this::produceTweetsByUsername);
     }
 
-    private void produceTweetsByUsername(final List<String> usernames) {
-        usernames.forEach(username -> tweetProducer.produce(tweetSearchEngine.findRecentTweetsByUsername(username)));
+    private void produceTweetsByUsername(final String username) {
+        tweetProducer.produce(tweetSearchEngine.findRecentTweetsByUsername(username));
     }
 }
