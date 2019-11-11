@@ -1,0 +1,29 @@
+server:
+  port: 8762
+
+spring:
+  application:
+    name: api-gateway
+
+zuul:
+  ignored-services: '*'
+  routes:
+    sync:
+      path: /sync/**
+      serviceId: twitter-integration
+    search:
+      path: /search/**
+      serviceId: es-integration
+    statistics:
+      path: /statistics/**
+      serviceId: es-integration
+    accounts:
+      path: /accounts/**
+      serviceId: spring-data-jpa-user-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
