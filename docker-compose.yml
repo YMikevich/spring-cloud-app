@@ -4,17 +4,11 @@ services:
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
-    ports:
-      - '15672:15672'
-      - '5672:5672'
     networks:
       - spring-cloud-services-network
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
     container_name: elasticsearch
-    ports:
-      - '9300:9300'
-      - '9200:9200'
     environment:
       - node.name=elasticsearch
       - discovery.type=single-node
@@ -26,8 +20,6 @@ services:
   postgres:
     image: postgres:9.6
     container_name: postgres
-    ports:
-      - '5432:5432'
     environment:
       - POSTGRES_PASSWORD
     volumes:
@@ -40,8 +32,6 @@ services:
       context: ./config-server
     environment:
       - EUREKA_SERVER=http://service-discovery:8761/eureka
-    ports:
-      - '8888:8888'
     volumes:
       - ~/.ssh:/root/.ssh:ro
     networks:
@@ -52,8 +42,6 @@ services:
     container_name: service-discovery
     build:
       context: ./service-discovery
-    ports:
-      - '8761:8761'
     networks:
       - spring-cloud-services-network
   twitter-integration:
@@ -71,8 +59,6 @@ services:
       - CONFIG_SERVER=http://config-server:8888
     build:
       context: ./clients/twitter-integration
-    ports:
-      - '8080:8080'
     volumes:
       - '$HOME/tweets-analyzer/twitter-integration/logs:/clients/twitter-integration/logs'
     networks:
@@ -89,8 +75,6 @@ services:
       - CONFIG_SERVER=http://config-server:8888
     build:
       context: ./clients/es-integration
-    ports:
-      - '8081:8081'
     volumes:
       - '$HOME/tweets-analyzer/es-integration/logs:/clients/es-integration/logs'
     networks:
@@ -106,8 +90,6 @@ services:
       - CONFIG_SERVER=http://config-server:8888
     build:
       context: ./clients/user-services/spring-data-jpa-user-service
-    ports:
-      - '8083:8083'
     networks:
       - spring-cloud-services-network
   api-gateway:
