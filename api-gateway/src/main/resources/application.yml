@@ -1,9 +1,20 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+    registry-fetch-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+
 server:
   port: 8762
 
 spring:
   application:
     name: api-gateway
+
+ribbon:
+  ReadTimeout: 60000
 
 zuul:
   ignored-services: '*'
@@ -20,10 +31,6 @@ zuul:
     accounts:
       path: /accounts/**
       serviceId: spring-data-jpa-user-service
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    prefer-ip-address: true
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 50000
