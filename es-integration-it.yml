@@ -14,7 +14,6 @@ services:
   es-integration-test:
     container_name: es-integration-test
     depends_on:
-      - rabbitmq
       - elasticsearch
     env_file:
       - es-integration-it.env

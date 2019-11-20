@@ -3,7 +3,6 @@ package com.github.ymikevich.es.integration.services;
 import com.github.ymikevich.es.integration.EsIntegrationApplicationContextIT;
 import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.api.model.TwitterUser;
-import com.github.ymikevich.es.integration.controllers.TweetController;
 import com.github.ymikevich.es.integration.repository.TweetRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +13,6 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -109,8 +107,8 @@ public class DefaultTweetServiceIT {
             + "}";
 
     //language=JSON
-    private static final String EXPECTED_JSON_SEARCH_RESPONSE_WITH_PAGINATION = "{\n" +
-            "  \"responseEntities\": [\n"
+    private static final String EXPECTED_JSON_SEARCH_RESPONSE_WITH_PAGINATION = "{\n"
+            + "  \"responseEntities\": [\n"
             + "    {\n"
             + "      \"tweetId\": 265473423,\n"
             + "      \"text\": \"Hello Hey\",\n"
