@@ -9,3 +9,4 @@ out/
 
 # env files
 /*.env
+!/es-integration-it.env

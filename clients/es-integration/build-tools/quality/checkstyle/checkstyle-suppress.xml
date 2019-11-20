@@ -6,4 +6,8 @@
 
 <suppressions>
     <suppress checks="HideUtilityClassConstructor" files="EsIntegrationApplication.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="EsIntegrationApplicationContextIT.java"/>
+    <suppress checks="FinalClass" files="EsIntegrationApplicationContextIT.java"/>
+    <suppress checks="VisibilityModifier" files="DefaultTweetServiceIT.java"/>
+    <suppress checks="ParameterNumber" files="DefaultTweetServiceIT.java"/>
 </suppressions>

@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.1.8.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
+    id 'idea'
     id 'checkstyle'
     id 'jacoco'
 }
@@ -12,6 +13,37 @@ checkstyle {
     toolVersion "6.7"
 }
 
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file('build-idea')
+    }
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom implementation
+    integrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
 group = 'com.github.ymikevich'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -19,6 +51,7 @@ sourceCompatibility = '11'
 repositories {
     mavenCentral()
 }
+
 ext {
     set('springCloudVersion', "Greenwich.SR3")
 }
@@ -27,6 +60,7 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
@@ -35,6 +69,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.retry:spring-retry:1.2.4.RELEASE'
+
 }
 
 dependencyManagement {

@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    networks:
+      - spring-cloud-services-network
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - cluster.name=tweets-cluster
+    volumes:
+      - 'esdata0:/usr/share/elasticsearch/data'
+    networks:
+      - spring-cloud-services-network
+
+  es-integration-test:
+    container_name: es-integration-test
+    depends_on:
+      - rabbitmq
+      - elasticsearch
+    env_file:
+      - es-integration-it.env
+    build:
+      context: ./clients/es-integration
+      dockerfile: IntegrationTestDockerfile
+    volumes:
+      - '$HOME/tweets-analyzer/es-integration/logs:/clients/es-integration/logs'
+    networks:
+      - spring-cloud-services-network
+
+volumes:
+  esdata0:
+    driver: local
+networks:
+  spring-cloud-services-network:
+    driver: bridge

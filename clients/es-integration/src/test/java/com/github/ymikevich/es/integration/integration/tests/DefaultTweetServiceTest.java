@@ -1,4 +1,4 @@
-package com.github.ymikevich.es.integration.services;
+package com.github.ymikevich.es.integration.integration.tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ymikevich.es.integration.api.model.Tweet;
@@ -6,6 +6,7 @@ import com.github.ymikevich.es.integration.api.requests.search.SearchRequest;
 import com.github.ymikevich.es.integration.api.requests.statistics.StatisticsRequest;
 import com.github.ymikevich.es.integration.exceptions.InvalidStatisticsRequestException;
 import com.github.ymikevich.es.integration.repository.TweetRepository;
+import com.github.ymikevich.es.integration.services.DefaultTweetService;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHits;
 import org.junit.Test;

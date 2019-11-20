@@ -1,0 +1,20 @@
+spring:
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
+    username: ${RABBIT_USERNAME:guest}
+    password: ${RABBIT_PASSWORD:guest}
+  data:
+    elasticsearch:
+      cluster-nodes: ${ELASTICSEARCH_CLUSTER_NODES:localhost:9300}
+      cluster-name: ${ELASTICSEARCH_CLUSTER_NAME:tweets-cluster}
+  cloud:
+    discovery:
+      enabled: ${CLOUD_DISCOVERY_ENABLED:false}
+    config:
+      discovery:
+        enabled: ${CLOUD_CONFIG_DISCOVERY:false}
+      enabled: ${CLOUD_CONFIG_ENABLED:false}
+
+rabbit:
+  queue:
+    name: ${RABBIT_QUEUE_NAME:tweets}
