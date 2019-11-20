@@ -5,7 +5,6 @@ import com.github.ymikevich.es.integration.api.model.Tweet;
 import com.github.ymikevich.es.integration.api.model.TwitterUser;
 import com.github.ymikevich.es.integration.repository.TweetRepository;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -15,11 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -30,15 +27,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class DefaultTweetServiceIT {
 
     @Autowired
-    WebApplicationContext context;
-
-    @Autowired
     TweetRepository repository;
 
     @Autowired
     TweetService service;
 
-    private MockMvc mockMvc;
+    @Autowired
+    MockMvc mockMvc;
 
     //language=JSON
     private static final String JSON_STATISTICS_REQUEST = "{\n"
@@ -137,13 +132,6 @@ public class DefaultTweetServiceIT {
             + "  }\n"
             + "}";
 
-
-    @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .build();
-    }
-
     @After
     public void tearDown() {
         repository.deleteAll();
@@ -158,10 +146,7 @@ public class DefaultTweetServiceIT {
         var tweet1 = generateTweet(user, 125324235L, 250, 300, "Hey");
         var tweet2 = generateTweet(user, 265473423L, 100, 150, "Hello");
         var tweet3 = generateTweet(user, 375685667L, 500, 1000, "Bye");
-        var tweets = new ArrayList<Tweet>();
-        tweets.add(tweet1);
-        tweets.add(tweet2);
-        tweets.add(tweet3);
+        var tweets = List.of(tweet1, tweet2, tweet3);
         service.persistTweets(tweets);
 
         var result = mockMvc.perform(post("/tweets/statistics").contentType(MediaType.APPLICATION_JSON)
@@ -169,6 +154,7 @@ public class DefaultTweetServiceIT {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andReturn();
+
         JSONAssert.assertEquals(EXPECTED_JSON_STATISTICS_RESPONSE, result.getResponse().getContentAsString(), JSONCompareMode.LENIENT);
     }
 
@@ -181,10 +167,7 @@ public class DefaultTweetServiceIT {
         var tweet1 = generateTweet(user, 125324235L, 250, 300, "Hey");
         var tweet2 = generateTweet(user, 265473423L, 100, 150, "Hello Hey");
         var tweet3 = generateTweet(user, 375685667L, 500, 1000, "Bye");
-        var tweets = new ArrayList<Tweet>();
-        tweets.add(tweet1);
-        tweets.add(tweet2);
-        tweets.add(tweet3);
+        var tweets = List.of(tweet1, tweet2, tweet3);
         service.persistTweets(tweets);
 
         var result1 = mockMvc.perform(post("/tweets/search").contentType(MediaType.APPLICATION_JSON)

@@ -5,12 +5,8 @@ spring:
       cluster-name: ${ELASTICSEARCH_CLUSTER_NAME:tweets-cluster}
   cloud:
     discovery:
-      enabled: ${CLOUD_DISCOVERY_ENABLED:false}
+      enabled: false
     config:
       discovery:
-        enabled: ${CLOUD_CONFIG_DISCOVERY:false}
-      enabled: ${CLOUD_CONFIG_ENABLED:false}
-
-rabbit:
-  queue:
-    name: ${RABBIT_QUEUE_NAME:tweets}
+        enabled: false
+      enabled: false
