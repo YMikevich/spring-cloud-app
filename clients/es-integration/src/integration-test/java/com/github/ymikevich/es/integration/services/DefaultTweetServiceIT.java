@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = EsIntegrationApplicationContextIT.class)
 @SpringBootTest(classes = EsIntegrationApplicationContextIT.class)
 public class DefaultTweetServiceIT {
 
@@ -37,9 +36,6 @@ public class DefaultTweetServiceIT {
 
     @Autowired
     TweetRepository repository;
-
-    @Autowired
-    TweetController controller;
 
     @Autowired
     TweetService service;
@@ -150,19 +146,6 @@ public class DefaultTweetServiceIT {
                 .build();
     }
 
-    private Tweet generateTweet(final TwitterUser user, final Long id, final int favoriteCount,
-                                final int retweetCount, final String text) {
-        var tweet = new Tweet();
-        tweet.setTweetId(id);
-        tweet.setCreatedAt(LocalDateTime.now().minusDays(1));
-        tweet.setFavoriteCount(favoriteCount);
-        tweet.setRetweetCount(retweetCount);
-        tweet.setSource("http://somesource.com");
-        tweet.setText(text);
-        tweet.setUser(user);
-        return tweet;
-    }
-
     @After
     public void tearDown() {
         repository.deleteAll();
@@ -219,5 +202,18 @@ public class DefaultTweetServiceIT {
 
         JSONAssert.assertEquals(EXPECTED_JSON_SEARCH_RESPONSE, result1.getResponse().getContentAsString(), JSONCompareMode.LENIENT);
         JSONAssert.assertEquals(EXPECTED_JSON_SEARCH_RESPONSE_WITH_PAGINATION, result2.getResponse().getContentAsString(), JSONCompareMode.LENIENT);
+    }
+
+    private Tweet generateTweet(final TwitterUser user, final Long id, final int favoriteCount,
+                                final int retweetCount, final String text) {
+        var tweet = new Tweet();
+        tweet.setTweetId(id);
+        tweet.setCreatedAt(LocalDateTime.now().minusDays(1));
+        tweet.setFavoriteCount(favoriteCount);
+        tweet.setRetweetCount(retweetCount);
+        tweet.setSource("http://somesource.com");
+        tweet.setText(text);
+        tweet.setUser(user);
+        return tweet;
     }
 }

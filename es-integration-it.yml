@@ -8,8 +8,6 @@ services:
       - node.name=elasticsearch
       - discovery.type=single-node
       - cluster.name=tweets-cluster
-    volumes:
-      - 'esdata0:/usr/share/elasticsearch/data'
     networks:
       - spring-cloud-services-network
 
@@ -23,8 +21,6 @@ services:
     build:
       context: ./clients/es-integration
       dockerfile: es-integration-it.Dockerfile
-    volumes:
-      - '$HOME/tweets-analyzer/es-integration/logs:/clients/es-integration/logs'
     networks:
       - spring-cloud-services-network
 
