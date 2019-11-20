@@ -27,7 +27,7 @@ services:
       - es-integration-it.env
     build:
       context: ./clients/es-integration
-      dockerfile: IntegrationTestDockerfile
+      dockerfile: es-integration-it.Dockerfile
     volumes:
       - '$HOME/tweets-analyzer/es-integration/logs:/clients/es-integration/logs'
     networks:
