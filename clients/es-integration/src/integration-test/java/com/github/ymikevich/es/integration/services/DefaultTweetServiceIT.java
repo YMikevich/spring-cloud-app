@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,18 +23,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = EsIntegrationApplicationContextIT.class)
 public class DefaultTweetServiceIT {
 
     @Autowired
-    TweetRepository repository;
+    private TweetRepository repository;
 
     @Autowired
-    TweetService service;
-
-    @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     //language=JSON
     private static final String JSON_STATISTICS_REQUEST = "{\n"
@@ -123,6 +122,7 @@ public class DefaultTweetServiceIT {
             + "  }\n"
             + "}";
 
+    //language=JSON
     private static final String EXPECTED_JSON_STATISTICS_RESPONSE = "{\n"
             + "  \"averageLikeValue\": 283.3333333333333,\n"
             + "  \"mostRetweetedUserTweet\": {\n"
@@ -147,7 +147,7 @@ public class DefaultTweetServiceIT {
         var tweet2 = generateTweet(user, 265473423L, 100, 150, "Hello");
         var tweet3 = generateTweet(user, 375685667L, 500, 1000, "Bye");
         var tweets = List.of(tweet1, tweet2, tweet3);
-        service.persistTweets(tweets);
+        repository.saveAll(tweets);
 
         var result = mockMvc.perform(post("/tweets/statistics").contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_STATISTICS_REQUEST))
@@ -168,7 +168,7 @@ public class DefaultTweetServiceIT {
         var tweet2 = generateTweet(user, 265473423L, 100, 150, "Hello Hey");
         var tweet3 = generateTweet(user, 375685667L, 500, 1000, "Bye");
         var tweets = List.of(tweet1, tweet2, tweet3);
-        service.persistTweets(tweets);
+        repository.saveAll(tweets);
 
         var result1 = mockMvc.perform(post("/tweets/search").contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_SEARCH_REQUEST))
