@@ -12,6 +12,30 @@ checkstyle {
     toolVersion "6.7"
 }
 
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom implementation
+    integrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
 group = 'com.github.ymikevich'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -19,6 +43,7 @@ sourceCompatibility = '11'
 repositories {
     mavenCentral()
 }
+
 ext {
     set('springCloudVersion', "Greenwich.SR3")
 }
@@ -27,6 +52,7 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
@@ -43,3 +69,16 @@ dependencyManagement {
     }
 }
 
+apply plugin: 'java'
+
+test {
+    filter {
+        includeTestsMatching "*Test"
+    }
+}
+
+integrationTest {
+    filter {
+        includeTestsMatching "*IT"
+    }
+}

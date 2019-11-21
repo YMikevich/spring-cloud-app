@@ -1,0 +1,16 @@
+spring:
+  data:
+    elasticsearch:
+      cluster-nodes: ${ELASTICSEARCH_CLUSTER_NODES:localhost:9300}
+      cluster-name: ${ELASTICSEARCH_CLUSTER_NAME:tweets-cluster}
+  cloud:
+    discovery:
+      enabled: false
+    config:
+      discovery:
+        enabled: false
+      enabled: false
+  rabbitmq:
+    listener:
+      simple:
+        auto-startup: false

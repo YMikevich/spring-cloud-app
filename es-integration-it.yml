@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - cluster.name=tweets-cluster
+    networks:
+      - spring-cloud-services-network
+
+  es-integration-test:
+    container_name: es-integration-test
+    depends_on:
+      - elasticsearch
+    env_file:
+      - es-integration-it.env
+    build:
+      context: ./clients/es-integration
+      dockerfile: es-integration-it.Dockerfile
+    networks:
+      - spring-cloud-services-network
+
+networks:
+  spring-cloud-services-network:
+    driver: bridge
